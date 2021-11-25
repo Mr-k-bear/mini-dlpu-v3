@@ -13,7 +13,7 @@
     "alwaysStrict": true,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "strict": true,
     "strictPropertyInitialization": true,
     "lib": ["ES2020"],

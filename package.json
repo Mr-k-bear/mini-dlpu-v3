@@ -1,12 +1,12 @@
 {
-  "name": "miniprogram-ts-less-quickstart",
-  "version": "1.0.0",
-  "description": "",
+  "name": "mini-dlpu-v3",
+  "version": "3.0.0",
+  "description": "Third Generation Mini DLPU",
   "scripts": {
   },
   "keywords": [],
-  "author": "",
-  "license": "",
+  "author": "MrKBear",
+  "license": "MIT",
   "dependencies": {
   },
   "devDependencies": {
