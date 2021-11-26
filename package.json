@@ -2,12 +2,12 @@
   "name": "mini-dlpu-v3",
   "version": "3.0.0",
   "description": "Third Generation Mini DLPU",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [],
   "author": "MrKBear",
   "license": "MIT",
   "dependencies": {
+    "miniprogram-ci": "^1.6.10"
   },
   "devDependencies": {
     "miniprogram-api-typings": "^2.8.3-1"
