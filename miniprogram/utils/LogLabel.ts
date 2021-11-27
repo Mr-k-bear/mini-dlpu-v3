@@ -1,43 +1,77 @@
-import {LogLabel, LogStyle} from "./Logger";
+import {LogLabel, LogStyle} from "../logger/index";
 
-// 成功
-export const SuccessLabel = new LogLabel(
-    "SUCCESS", new LogStyle().setColor("#FFFFFF", "#EE113D").setBorder("5px")
-);
-
-// 失败
-export const FailedLabel = new LogLabel(
-    "SUCCESS", new LogStyle().setColor("#FFFFFF", "#33ff66").setBorder("3px")
-);
+/**
+ * border-radius 5px
+ * padding 0 5px
+ */
+const border3PxStyle:LogStyle = new LogStyle().setBorder("5px").setBlank("0 5px");
 
 
+/**
+ * 定义状态
+ */
+export namespace Status {
 
-// 致命
-export const FatalLabel = new LogLabel(
-    "FATAL", new LogStyle().setColor("#FFFFFF", "#FF00CC").setBorder("3px")
-);
+    /**
+     * 成功
+     */
+    export const SuccessLabel = new LogLabel(
+        "SUCCESS", border3PxStyle.clone().setColor("#FFFFFF", "#EE113D")
+    );
 
-// 错误
-export const ErrorLabel = new LogLabel(
-    "ERROR", new LogStyle().setColor("#FFFFFF", "#FF0000").setBorder("3px")
-);
+    /**
+     * 失败
+     */
+    export const FailedLabel = new LogLabel(
+        "SUCCESS", border3PxStyle.clone().setColor("#FFFFFF", "#33ff66")
+    );
+}
 
-// 警告
-export const WarnLabel = new LogLabel(
-    "WARN", new LogStyle().setColor("#FFFFFF", "#FF9900").setBorder("3px")
-);
+/**
+ * 定义等级
+ */
+export namespace Level {
 
-// 消息
-export const InfoLabel = new LogLabel(
-    "INFO", new LogStyle().setColor("#FFFFFF", "#99FF00").setBorder("3px")
-);
+    /**
+     * 致命
+     */
+    export const FatalLabel = new LogLabel(
+        "FATAL", border3PxStyle.clone().setColor("#FFFFFF", "#FF00CC")
+    );
 
-// 调试
-export const DebugLabel = new LogLabel(
-    "DEBUG", new LogStyle().setColor("#FFFFFF", "#00FF99").setBorder("3px")
-);
+    /**
+     * 错误
+     */
+    export const ErrorLabel = new LogLabel(
+        "ERROR", border3PxStyle.clone().setColor("#FFFFFF", "#FF0000")
+    );
 
-// 追踪
-export const TraceLabel = new LogLabel(
-    "TRACE", new LogStyle().setColor("#FFFFFF", "#00CCFF").setBorder("3px")
-);
+    /**
+     * 警告
+     */
+    export const WarnLabel = new LogLabel(
+        "WARN", border3PxStyle.clone().setColor("#FFFFFF", "#FF9900")
+    );
+
+    /**
+     * 消息
+     */
+    export const InfoLabel = new LogLabel(
+        "INFO", border3PxStyle.clone().setColor("#FFFFFF", "#99FF00")
+    );
+
+    /**
+     * 调试
+     */
+    export const DebugLabel = new LogLabel(
+        "DEBUG", border3PxStyle.clone().setColor("#FFFFFF", "#00FF99")
+    );
+
+    /**
+     * 追踪
+     */
+    export const TraceLabel = new LogLabel(
+        "TRACE", border3PxStyle.clone().setColor("#FFFFFF", "#00CCFF")
+    );
+}
+
