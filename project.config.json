@@ -5,7 +5,7 @@
   },
   "miniprogramRoot": "miniprogram/",
   "compileType": "miniprogram",
-  "libVersion": "2.21.0",
+  "libVersion": "2.16.1",
   "projectname": "mini-dlpu-v3",
   "setting": {
     "urlCheck": false,
@@ -51,5 +51,8 @@
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
   "appid": "wx7d809f5e8955843d",
+  "scripts": {
+    "beforeCompile": ""
+  },
   "condition": {}
 }

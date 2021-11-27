@@ -12,4 +12,9 @@ $RECYCLE.BIN/
 
 # Node.js
 node_modules/
+
+# wxss
+*.wxss
+
+# idea
 .idea

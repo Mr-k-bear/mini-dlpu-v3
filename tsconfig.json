@@ -19,7 +19,11 @@
     "lib": ["ES2020"],
     "typeRoots": [
       "./typings"
-    ]
+    ],
+    "baseUrl": "./miniprogram/",
+    "paths": {
+        "@logger": ["logger/"]
+    }
   },
   "include": [
     "./**/*.ts"

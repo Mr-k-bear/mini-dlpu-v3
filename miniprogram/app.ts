@@ -1,27 +1,36 @@
-import {Logger} from "./utils/Logger";
-import * as label from "./utils/LogLabel";
+import { Logger, LevelLogLabel } from "./logger/index";
 
 
 App<IAppOption>({
 
-  /**
-   * 全局数据
-   */
-  globalData: {},
+    /**
+     * 全局数据
+     */
+    globalData: {},
 
-  /**
-   * 小程序加载时
-   */
-  onLaunch() {
+    /**
+     * 小程序加载时
+     */
+    onLaunch() {
 
-    Logger.log("hh", 
-        label.FatalLabel,label.ErrorLabel,label.WarnLabel,
-        label.InfoLabel,label.DebugLabel,label.TraceLabel
-    );
+    console.log(Logger.l({val:"hh"}, 
+    LevelLogLabel.FatalLabel,LevelLogLabel.ErrorLabel,LevelLogLabel.WarnLabel,
+    LevelLogLabel.InfoLabel,LevelLogLabel.DebugLabel,LevelLogLabel.TraceLabel
+    ));
     
-    Logger.logM(
-        [label.FatalLabel,label.ErrorLabel,label.WarnLabel,
-        label.InfoLabel,label.DebugLabel,label.TraceLabel], "hh"
-    );
+    console.log(Logger.m(
+        [LevelLogLabel.FatalLabel,LevelLogLabel.ErrorLabel,LevelLogLabel.WarnLabel,
+            LevelLogLabel.InfoLabel,LevelLogLabel.DebugLabel,LevelLogLabel.TraceLabel], {val:"hh"}, "hh"
+    ));
+
+    console.log(Logger.ll({val:"hh"}, 
+    LevelLogLabel.FatalLabel,LevelLogLabel.ErrorLabel,LevelLogLabel.WarnLabel,
+    LevelLogLabel.InfoLabel,LevelLogLabel.DebugLabel,LevelLogLabel.TraceLabel
+    ));
+
+    console.log(Logger.lm(
+        [LevelLogLabel.FatalLabel,LevelLogLabel.ErrorLabel,LevelLogLabel.WarnLabel,
+            LevelLogLabel.InfoLabel,LevelLogLabel.DebugLabel,LevelLogLabel.TraceLabel], {val:"hh"}, "hh"
+    ));
   }
 })
