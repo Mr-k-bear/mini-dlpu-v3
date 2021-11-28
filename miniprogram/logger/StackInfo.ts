@@ -19,11 +19,44 @@ class StackInfo {
      */
     public url:string | undefined;
 
-    public setInfo(functionName:string, fileName:string, url:string):StackInfo {
+    /**
+     * 文件名和行号
+     */
+    public fileNameLine: string | undefined;    
+
+    /**
+     * 设置信息
+     * @param functionName 函数名
+     * @param fileName 文件名
+     * @param url 文件路径
+     */
+    public setInfo(functionName:string, fileNameLine:string, url:string):StackInfo {
         this.functionName = functionName;
-        this.fileName = fileName;
+        this.fileNameLine = fileNameLine;
         this.url = url;
         return this;
+    }
+
+    /**
+     * 计算文件名
+     */
+    public calcFileName():string | undefined {
+
+        let replaceToTs = this.fileNameLine?.replace(".js", ".ts");
+        let matched = replaceToTs?.match(/^(.+\.(js|ts)):\d+:\d+$/);
+
+        return matched ? matched[1] : undefined;
+    }
+
+    /**
+     * 计算路径名
+     */
+    public calcPathName():string | undefined {
+
+        let replaceToTs = this.url?.replace(".js", ".ts");
+        let matched = replaceToTs?.match(/^https?:\/\/(\d+\.){3}\d+:\d+\/(.+):\d+:\d+$/);
+
+        return matched ? matched[2] : undefined;
     }
 
     /**
@@ -65,7 +98,7 @@ class StackInfo {
     /**
      * 排除的
      */
-    public static readonly excludeFile:RegExp = /^Logger\.js:\d+:\d+/;
+    public static readonly excludeFile:RegExp = /^.*(\\|\/)logger(\\|\/).+\.js:\d+:\d+/;
 
     /**
      * 获取第一个调用栈
@@ -76,9 +109,9 @@ class StackInfo {
 
         for(let i = 0; i < callStack.length; i++) {
 
-            if(!callStack[i].fileName) continue;
+            if(!callStack[i].url) continue;
 
-            if(!StackInfo.excludeFile.test(callStack[i].fileName ?? "")) {
+            if(!StackInfo.excludeFile.test(callStack[i].url ?? "")) {
                 return callStack[i];
             }
         }

@@ -1,4 +1,4 @@
-import {LOGGER_CONSOLE, LOGGER_FILTER} from "../Config";
+import { LOGGER_FILTER, LOGGER_CONSOLE } from "../utils/Config";
 import { InternalLogLabel } from "./InternalLogLabel";
 import { LogLabel } from "./LogLabel";
 import { MultipleLogContent } from "./MultipleLogContent";
@@ -147,12 +147,12 @@ class Logger {
     public static logLine<T>(content:T, ...labels:LogLabel[]):T {
         return Logger.logBase<Array<T>>(
             new MultipleLogContent<Array<T>>(content), labels, 
-            [InternalLogLabel.urlLabel, InternalLogLabel.blankLabel]
+            [InternalLogLabel.fileNameLabel, InternalLogLabel.blankLabel]
         )[0];
     }
 
     /**
-     * 函数 Logger.logMultiple 的别名
+     * 函数 Logger.logLine 的别名
      */
     public static ll:typeof Logger.logLine = Logger.logLine;
 
@@ -164,7 +164,7 @@ class Logger {
     public static logLineMultiple<T extends Array<any>>(labels:LogLabel[], ...content:T):T {
         return Logger.logBase<T>(
             new MultipleLogContent<T>(...content), labels, 
-            [InternalLogLabel.urlLabel, InternalLogLabel.blankLabel]
+            [InternalLogLabel.fileNameLabel, InternalLogLabel.blankLabel]
         );
     }
 

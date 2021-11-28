@@ -1,4 +1,5 @@
-import { Logger, LevelLogLabel } from "./logger/index";
+import { Logger } from "./logger/Logger";
+import { LevelLogLabel } from "./logger/LevelLogLabel";
 
 
 App<IAppOption>({
