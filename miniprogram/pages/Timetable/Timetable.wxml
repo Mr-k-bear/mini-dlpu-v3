@@ -1,3 +1,5 @@
-<view class="status-bar" style="height:{{barh}}px"></view>
 
-<text>pages/Timetable/Timetable.wxml{{m1$a}}</text>
+<!-- 顶部状态栏 -->
+<view class="status-bar" style="height: {{ statusBar$barHeight }}px"></view>
+
+<text>afdff</text>

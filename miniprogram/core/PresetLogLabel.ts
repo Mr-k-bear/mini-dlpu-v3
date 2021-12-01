@@ -99,7 +99,7 @@ class StackInfo {
     /**
      * 排除的
      */
-    public static readonly excludeFile:RegExp = /^.*(\\|\/)logger(\\|\/).+\.js:\d+:\d+/;
+    public static readonly excludeFile:RegExp = /^.*(\\|\/)core(\\|\/)(.*Log.*).js:\d+:\d+/;
 
     /**
      * 获取第一个调用栈
@@ -179,7 +179,7 @@ class StackLogLabel {
 /**
  * 生成圆角颜色标签样式
  */
- const normalLevelStyleGen = (color:string):LogStyle => {
+const normalLevelStyleGen = (color:string):LogStyle => {
     return new LogStyle().setBorder("4px", `1px solid ${color}`)
     .setColor(color).setBlank("0 5px");
 }
@@ -235,7 +235,7 @@ class LevelLogLabel {
 /**
  * 生成圆角颜色标签样式
  */
- const normalLifeStyleGen = (r:number, g:number, b:number):LogStyle => {
+const normalLifeStyleGen = (r:number, g:number, b:number):LogStyle => {
     return new LogStyle().setBorder("4px", `1px solid rgb(${ r }, ${ g }, ${ b })`)
     .setColor(`rgb(${ r }, ${ g }, ${ b })`, `rgba(${ r }, ${ g }, ${ b }, .1)`)
     .setBlank("0 5px");
@@ -310,4 +310,4 @@ class LifeCycleLogLabel {
     );
 }
 
-export { StackInfo, StackLogLabel, LevelLogLabel, LifeCycleLogLabel };
+export { StackInfo, StackLogLabel, LevelLogLabel, LifeCycleLogLabel, normalLifeStyleGen as colorRadio };

@@ -11,6 +11,13 @@
 export const LOGGER_CONSOLE:boolean = true;
 
 /**
+ * 是否在控制台输出时启用标签样式
+ * 如果在手机上调试可以关闭此选项
+ * 因为手机上的控制台无法正确显示样式
+ */
+export const LOGGER_STYLE:boolean = true;
+
+/**
  * 调试过滤器
  * 按照 LogLabel 进行过滤
  * 

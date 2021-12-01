@@ -1,3 +1,9 @@
-// view.status-bar {
-//     // background-color: antiquewhite;
-// }
+view.status-bar {
+    background-color: #F8F8F8;
+}
+
+@media (prefers-color-scheme: dark){
+    view.status-bar {
+      background-color: #191919;
+    }
+}
