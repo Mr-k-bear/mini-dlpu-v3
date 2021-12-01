@@ -425,9 +425,9 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
                 func.push(`[${ key }]`);
             }
 
-            let log:string = `模块 [${ this.modules[i].nameSpace }] 加载:\n`;
-            log += `Using Props: ${ data.join(", ") }\n`;
-            log += `Using Function: ${ func.join(", ") }\n`;
+            let log:string = `模块 [${ this.modules[i].nameSpace }] 加载完成...\n`;
+            if(data.length > 0) log += `Using Props: ${ data.join(", ") }\n`;
+            if(func.length > 0) log += `Using Function: ${ func.join(", ") }\n`;
             
             Logger.log(log, LevelLogLabel.TraceLabel, Manager.AddModuleLabel);
         }
