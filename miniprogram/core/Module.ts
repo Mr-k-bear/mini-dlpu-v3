@@ -1,3 +1,7 @@
+import mitt, { Emitter, EventHandlerMap, EventType, Handler, WildcardHandler } from "./EventEmitter";
+import { LogLabel, LogStyle } from "./LogLabel";
+import { Logger } from "./Logger";
+import { LevelLogLabel } from "./PresetLogLabel";
 
 /**
  * 自定义对象类型
@@ -52,13 +56,15 @@ type Depends<M extends Manager<AnyWXContext>> = {
  * 页面模组
  * @template M 所属 Manager
  * @template DEP 模组依赖
+ * @template E 模组事件
  * @template TD 模组 Data 类型
  */
 class Modular<
     M   extends Manager<AnyWXContext> = Manager<AnyWXContext>,
     DEP extends Depends<M> = Depends<M>,
+    E   extends Record<EventType, unknown> = Record<EventType, unknown>,
     TD  extends IAnyTypeObject = IAnyTypeObject>
-implements WXContext<TD, IAnyTypeObject> {
+implements WXContext<TD, IAnyTypeObject>, Emitter<E> {
 
     // [x:string]: any;
 
@@ -87,17 +93,17 @@ implements WXContext<TD, IAnyTypeObject> {
     /**
      * 模组使用的函数列表
      */
-    private functionList:Set<string>;
+    public functionList:Set<string>;
 
     /**
      * 函数使用的参数列表
      */
-    private paramList:Set<string>;
+    public paramList:Set<string>;
 
     /**
      * 命名空间
      */
-    private nameSpace:string;
+    public nameSpace:string;
 
     // 映射主上下文属性
     public get is():string { return this.context.is };
@@ -125,6 +131,34 @@ implements WXContext<TD, IAnyTypeObject> {
         this.functionList = new Set<string>();
         this.paramList = new Set<string>();
         this.nameSpace = nameSpace;
+
+        this.emitter = mitt<E>();
+
+    }
+
+    /**
+     * 内部事件控制器
+     */
+    private emitter:Emitter<E>;
+
+    public get all():EventHandlerMap<E> { return this.emitter.all };
+
+    on<Key extends keyof E>(type: Key, handler: Handler<E[Key]>): void;
+    on(type: "*", handler: WildcardHandler<E>): void;
+    on(type: any, handler: any): void {
+        return this.emitter.on(type, handler);
+    }
+
+    off<Key extends keyof E>(type: Key, handler?: Handler<E[Key]>): void;
+    off(type: "*", handler: WildcardHandler<E>): void;
+    off(type: any, handler?: any): void {
+        return this.emitter.off(type, handler);
+    }
+
+    emit<Key extends keyof E>(type: Key, event: E[Key]): void;
+    emit<Key extends keyof E>(type: undefined extends E[Key] ? Key : never): void;
+    emit(type: any, event?: any): void {
+        return this.emitter.emit(type, event);
     }
 
     public setData(data:Partial<TD>, callback?: () => void):void {
@@ -293,40 +327,44 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
      * 创建指定生命周期的钩子
      * @param key 生命周期键值
      */
-    public creatHooks(key:keyof ILifetime):ILifetime[keyof ILifetime] {
-        return (...arg: any[]) => {
+    public creatHooks(key:keyof ILifetime):(...arg: any[]) => Promise<any> {
+        return async (...arg: any[]) => {
 
             let hooks:Promise<any>[] = [];
-            let simple:any;
 
             for(let i = 0; i < this.modules.length; i++) {
 
-                let res: Promise<any> | any = 
-                (this.modules[i] as IAnyTypeObject)[key](...arg);
+                let fn:Function = (this.modules[i] as IAnyTypeObject)[key];
+
+                if(fn === void 0) continue;
+                let res: Promise<any> | any = fn.apply(this.modules[i], arg);
                 
                 if (res instanceof Promise) {
                     hooks.push(res);
-                    
                 } else {
                     hooks.push(Promise.resolve(res));
                 }
-
-                if (
-                    key === "onShareAppMessage" || 
-                    key === "onShareTimeline" || 
-                    key === "onAddToFavorites"
-                ) {
-                    
-                    // 如果返回值有特殊含义在处理时进行 MinIn
-                    simple = Object.assign({}, simple, res);
-                } else {
-                    simple = res;
-                }
-                
             }
 
-            if(hooks.length === 0) return;
-            if(hooks.length === 1) return simple;
+            if (
+                key === "onShareAppMessage" || 
+                key === "onShareTimeline" || 
+                key === "onAddToFavorites"
+            ) {
+                
+                // 如果返回值有特殊含义在处理时进行 MinIn
+                return Promise.all(hooks).then((res) => {
+
+                    let simple:IAnyTypeObject = {};
+
+                    for(let i = 0; i < res.length; i++) {
+                        simple = Object.assign({}, simple, res);
+                    }
+
+                    return Promise.resolve(simple);
+                })
+                
+            }
 
             return Promise.all(hooks);
         }
@@ -344,11 +382,79 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
 
     /**
      * 加载全部的模块
+     * @param query onLoad 接收的参数
      */
     public loadAllModule(query:Record<string, string | undefined>) {
+
+        // 创建全部钩子
         this.creatAllHooks();
+
+        // 加载全部模组数据
+        for(let i = 0; i < this.modules.length; i++) {
+
+            if(this.modules[i].data)
+            for(let key in this.modules[i].data) {
+
+                if(this.context.data === void 0) this.context.data = {};
+
+                if(this.modules[i].data !== void 0) {
+                    this.context.data[`${ this.modules[i].nameSpace }$${ key }`] = 
+                    ( this.modules[i].data as IAnyTypeObject )[key];
+                    // this.modules[i]
+                }
+            }
+        }
+
+        // 将全部数据发布到视图层
+        if(this.context.data !== void 0)
+        this.context.setData(this.context.data);
+
+        // 调用全部模块的 onLoad 周期
         let res = this.creatHooks("onLoad")(query as any); 
+
+        // 打印每个模块的键值对使用情况
+        for(let i = 0; i < this.modules.length; i++) {
+            let data:string[] = [];
+            let func:string[] = [];
+
+            for(let key of this.modules[i].paramList) {
+                data.push(`[${ key }]`);
+            }
+
+            for(let key of this.modules[i].functionList) {
+                func.push(`[${ key }]`);
+            }
+
+            let log:string = `模块 [${ this.modules[i].nameSpace }] 加载完成...\n`;
+            if(data.length > 0) log += `Using Props: ${ data.join(", ") }\n`;
+            if(func.length > 0) log += `Using Function: ${ func.join(", ") }\n`;
+            
+            Logger.log(log, LevelLogLabel.TraceLabel, Manager.AddModuleLabel);
+        }
+
         return res;
+    }
+
+    /**
+     * 模块被添加时的标签
+     */
+    public static readonly AddModuleLabel = new LogLabel("addModule", 
+        new LogStyle().setBorder("4px", `1px solid #8600FF`)
+        .setColor("#FF00FF", "rgba(54, 0, 255, .2)").setBlank("0 5px")
+    )
+
+    /**
+     * 加载 Manager 控件 
+     * @param fn 约束后调用的函数用来添加模块
+     */
+    public static Page(fn:(manager:Manager<AnyWXContext>) => void) {
+        Page({
+            async onLoad(query) {
+                let manager = new Manager(this);
+                fn(manager);
+                manager.loadAllModule(query);
+            }
+        })
     }
 
 }
