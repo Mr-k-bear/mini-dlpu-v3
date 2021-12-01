@@ -1,4 +1,6 @@
-import { Logger, LevelLogLabel } from "./logger/index";
+import { Logger } from "./logger/Logger";
+import { LevelLogLabel } from "./logger/LevelLogLabel";
+import { LifeCycleLogLabel } from "./logger/LifeCycleLogLabel";
 
 
 App<IAppOption>({
@@ -12,25 +14,7 @@ App<IAppOption>({
      * 小程序加载时
      */
     onLaunch() {
-
-    console.log(Logger.l({val:"hh"}, 
-    LevelLogLabel.FatalLabel,LevelLogLabel.ErrorLabel,LevelLogLabel.WarnLabel,
-    LevelLogLabel.InfoLabel,LevelLogLabel.DebugLabel,LevelLogLabel.TraceLabel
-    ));
-    
-    console.log(Logger.m(
-        [LevelLogLabel.FatalLabel,LevelLogLabel.ErrorLabel,LevelLogLabel.WarnLabel,
-            LevelLogLabel.InfoLabel,LevelLogLabel.DebugLabel,LevelLogLabel.TraceLabel], {val:"hh"}, "hh"
-    ));
-
-    console.log(Logger.ll({val:"hh"}, 
-    LevelLogLabel.FatalLabel,LevelLogLabel.ErrorLabel,LevelLogLabel.WarnLabel,
-    LevelLogLabel.InfoLabel,LevelLogLabel.DebugLabel,LevelLogLabel.TraceLabel
-    ));
-
-    console.log(Logger.lm(
-        [LevelLogLabel.FatalLabel,LevelLogLabel.ErrorLabel,LevelLogLabel.WarnLabel,
-            LevelLogLabel.InfoLabel,LevelLogLabel.DebugLabel,LevelLogLabel.TraceLabel], {val:"hh"}, "hh"
-    ));
+        Logger.log("小程序启动...", 
+        LevelLogLabel.TraceLabel, LifeCycleLogLabel.OnLaunchLabel);
   }
 })

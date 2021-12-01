@@ -1,0 +1,17 @@
+
+page {
+    background-color: #f4f0f1;
+    color: rgba(0, 0, 0, .55);
+    font-weight: 500;
+    font-size: .9em;
+    font-family: 'Lucida Sans', 
+    'Lucida Sans Regular', 'Lucida Grande', 
+    'Lucida Sans Unicode', 'Geneva', 'Verdana', 'sans-serif';
+}
+  
+@media (prefers-color-scheme: dark){
+    page {
+      background-color: #1f1f1f;
+      color: rgba(255, 255, 255, .55);
+    }
+}
