@@ -1,3 +1,4 @@
+import mitt, { Emitter, EventHandlerMap, EventType, Handler, WildcardHandler } from "./EventEmitter";
 
 /**
  * 自定义对象类型
@@ -52,13 +53,15 @@ type Depends<M extends Manager<AnyWXContext>> = {
  * 页面模组
  * @template M 所属 Manager
  * @template DEP 模组依赖
+ * @template E 模组事件
  * @template TD 模组 Data 类型
  */
 class Modular<
     M   extends Manager<AnyWXContext> = Manager<AnyWXContext>,
     DEP extends Depends<M> = Depends<M>,
+    E   extends Record<EventType, unknown> = Record<EventType, unknown>,
     TD  extends IAnyTypeObject = IAnyTypeObject>
-implements WXContext<TD, IAnyTypeObject> {
+implements WXContext<TD, IAnyTypeObject>, Emitter<E> {
 
     // [x:string]: any;
 
@@ -125,6 +128,34 @@ implements WXContext<TD, IAnyTypeObject> {
         this.functionList = new Set<string>();
         this.paramList = new Set<string>();
         this.nameSpace = nameSpace;
+
+        this.emitter = mitt<E>();
+
+    }
+
+    /**
+     * 内部事件控制器
+     */
+    private emitter:Emitter<E>;
+
+    public get all():EventHandlerMap<E> { return this.emitter.all };
+
+    on<Key extends keyof E>(type: Key, handler: Handler<E[Key]>): void;
+    on(type: "*", handler: WildcardHandler<E>): void;
+    on(type: any, handler: any): void {
+        return this.emitter.on(type, handler);
+    }
+
+    off<Key extends keyof E>(type: Key, handler?: Handler<E[Key]>): void;
+    off(type: "*", handler: WildcardHandler<E>): void;
+    off(type: any, handler?: any): void {
+        return this.emitter.off(type, handler);
+    }
+
+    emit<Key extends keyof E>(type: Key, event: E[Key]): void;
+    emit<Key extends keyof E>(type: undefined extends E[Key] ? Key : never): void;
+    emit(type: any, event?: any): void {
+        return this.emitter.emit(type, event);
     }
 
     public setData(data:Partial<TD>, callback?: () => void):void {
@@ -301,8 +332,10 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
 
             for(let i = 0; i < this.modules.length; i++) {
 
-                let res: Promise<any> | any = 
-                (this.modules[i] as IAnyTypeObject)[key](...arg);
+                let fn:Function = (this.modules[i] as IAnyTypeObject)[key];
+
+                if(fn === void 0) continue;
+                let res: Promise<any> | any = fn.apply(this.modules[i], arg);
                 
                 if (res instanceof Promise) {
                     hooks.push(res);

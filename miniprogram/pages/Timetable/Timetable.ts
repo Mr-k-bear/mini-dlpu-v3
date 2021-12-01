@@ -7,7 +7,7 @@ Page({
     /**
      * 课程表页面加载
      */
-    onLoad: async function () {
+    onLoad: async function (query) {
 
         this;
 
@@ -15,8 +15,7 @@ Page({
         let m1 = manager.addModule(M1, "m1");
         let m2 = manager.addModule(M2, "m2", {m1});
 
-        let manager2 = new Manager(this);
-        let m22 = manager.addModule(M2, "m1", {m1});
+        manager.loadAllModule(query);
 
         this.setData;
 
@@ -48,21 +47,25 @@ Page({
   
 })
 
-class M1<M extends Manager> extends Modular<M, {}> {
+class M1<M extends Manager> extends Modular<M, {}> implements Partial<ILifetime> {
 
     public onLoad(){
 
+    }
+
+    public onReady() {
+        console.log(this);
+        this.emit("lll", {a:1})
     }
 }
 
 class M2<M extends Manager> extends Modular<M, {m1:M1<M>}> {
     
     public onLoad() {
-        // this.setData();
+        this.setData({a:1});
+        this.depends?.m1.on("lll", (e)=>{
+            console.log(e)
+        })
+        console.log(this);
     }
-    // hhh(){
-        
-    // }
-
-    hh(){}
 }
