@@ -1,7 +1,33 @@
-import { LOGGER_FILTER, LOGGER_CONSOLE } from "../utils/Config";
-import { InternalLogLabel } from "./InternalLogLabel";
+import { LOGGER_FILTER, LOGGER_CONSOLE } from "./Config";
+import { StackLogLabel } from "./PresetLogLabel";
 import { LogLabel } from "./LogLabel";
-import { MultipleLogContent } from "./MultipleLogContent";
+
+
+/**
+ * 多重内容捆绑
+ * 用于 log 输出
+ */
+class MultipleLogContent<T extends Array<any>> {
+    
+    /**
+     * 输出内容
+     */
+    private readonly content:T;
+    
+    /**
+     * @param content 输出内容
+     */
+    public constructor(...content:T) {
+        this.content = content;
+    }
+
+    /**
+     * 获取内容
+     */
+    public getContent():T {
+        return this.content;
+    }
+}
 
 /**
  * 格式化日志输出
@@ -93,7 +119,7 @@ class Logger {
         // TODO: 这里可以添加一些钩子作为中间件处理日志输出
 
         // 测试是否输出内容
-        if(!Logger.testLog(...labels, ...attachLabel, InternalLogLabel.filterUrlLabel)) 
+        if(!Logger.testLog(...labels, ...attachLabel, StackLogLabel.filterUrlLabel)) 
         return content.getContent();
 
         // 计算收集样式
@@ -113,7 +139,7 @@ class Logger {
     public static log<T>(content:T, ...labels:LogLabel[]):T {
         return Logger.logBase<Array<T>>(
             new MultipleLogContent<Array<T>>(content), labels, 
-            [InternalLogLabel.fileNameLabel]
+            [StackLogLabel.fileNameLabel]
         )[0];
     }
 
@@ -130,7 +156,7 @@ class Logger {
     public static logMultiple<T extends Array<any>>(labels:LogLabel[], ...content:T):T {
         return Logger.logBase<T>(
             new MultipleLogContent<T>(...content), labels, 
-            [InternalLogLabel.fileNameLabel]
+            [StackLogLabel.fileNameLabel]
         );
     }
 
@@ -147,7 +173,7 @@ class Logger {
     public static logLine<T>(content:T, ...labels:LogLabel[]):T {
         return Logger.logBase<Array<T>>(
             new MultipleLogContent<Array<T>>(content), labels, 
-            [InternalLogLabel.fileNameLabel, InternalLogLabel.blankLabel]
+            [StackLogLabel.fileNameLabel, StackLogLabel.blankLabel]
         )[0];
     }
 
@@ -164,7 +190,7 @@ class Logger {
     public static logLineMultiple<T extends Array<any>>(labels:LogLabel[], ...content:T):T {
         return Logger.logBase<T>(
             new MultipleLogContent<T>(...content), labels, 
-            [InternalLogLabel.fileNameLabel, InternalLogLabel.blankLabel]
+            [StackLogLabel.fileNameLabel, StackLogLabel.blankLabel]
         );
     }
 

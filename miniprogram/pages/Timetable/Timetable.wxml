@@ -1,1 +1,3 @@
+<view class="status-bar" style="height:{{barh}}px"></view>
+
 <text>pages/Timetable/Timetable.wxml</text>

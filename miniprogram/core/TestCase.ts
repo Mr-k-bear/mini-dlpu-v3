@@ -1,6 +1,5 @@
 // import { Logger } from "../logger/Logger";
-import { LogStyle } from "../logger/LogStyle";
-import { LogLabel } from "../logger/LogLabel";
+import { LogStyle, LogLabel } from "./LogLabel";
 
 /**
  * 测试结果

@@ -1,66 +1,68 @@
-// pages/Timetable/Timetable.ts
+import { Logger } from "../../core/Logger";
+import { LevelLogLabel, LifeCycleLogLabel } from "../../core/PresetLogLabel";
+import { Manager, Modular, AnyWXContext, ILifetime } from "../../core/Module";
+
 Page({
 
-  /**
-   * 页面的初始数据
-   */
-  data: {
+    /**
+     * 课程表页面加载
+     */
+    onLoad: async function () {
 
-  },
+        this;
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad() {
+        let manager = new Manager(this);
+        let m1 = manager.addModule(M1, "m1");
+        let m2 = manager.addModule(M2, "m2", {m1});
 
-  },
+        let manager2 = new Manager(this);
+        let m22 = manager.addModule(M2, "m1", {m1});
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
+        this.setData;
 
-  },
+        Logger.log("课程表 (Timetable) 页面加载...", 
+        LevelLogLabel.TraceLabel, LifeCycleLogLabel.OnLoadLabel);
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
+        let systemInfo = wx.getSystemInfoSync();
+ 
+        //状态栏高度
+        let statusBarHeight = Number(systemInfo.statusBarHeight);
+        
+        let menu = wx.getMenuButtonBoundingClientRect()
+        
+        //导航栏高度
+        let navBarHeight = menu.height + (menu.top - statusBarHeight) * 2
+        
+        //状态栏加导航栏高度
+        let navStatusBarHeight = statusBarHeight + menu.height + (menu.top - statusBarHeight) * 2
+        
+        console.log('状态栏高度',statusBarHeight)
+        
+        console.log('导航栏高度',navBarHeight)
+        
+        console.log('状态栏加导航栏高度',navStatusBarHeight)
 
-  },
+        this.setData({barh: navStatusBarHeight});
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
+    }
+  
 })
+
+class M1<M extends Manager> extends Modular<M, {}> {
+
+    public onLoad(){
+
+    }
+}
+
+class M2<M extends Manager> extends Modular<M, {m1:M1<M>}> {
+    
+    public onLoad() {
+        // this.setData();
+    }
+    // hhh(){
+        
+    // }
+
+    hh(){}
+}
