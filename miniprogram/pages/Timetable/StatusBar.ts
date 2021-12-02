@@ -4,10 +4,38 @@ import { LogLabel } from "../../core/LogLabel";
 import { Logger } from "../../core/Logger";
 
 /**
+ * 在 UI 中显示的数据
+ */
+type DisplayData = {
+
+    /**
+     * 显示内容
+     */
+    val:string;
+
+    /**
+     * 唯一键值 用来做判断
+     */
+    key:string;
+};
+
+/**
+ * 模组事件
+ */
+type StatusBarEvent = {
+    m: DisplayData
+};
+
+/**
  * 顶部状态栏
  */
-class StatusBar<M extends Manager> extends Modular<M, {}> 
+class StatusBar<M extends Manager> extends Modular<M, {}, StatusBarEvent> 
 implements Partial<ILifetime> {
+
+    /**
+     * 导航栏高度补偿
+     */
+    public static readonly StatusBarHeightExtend:number = 5;
 
     /**
      * 页面日志输出标签
@@ -18,9 +46,15 @@ implements Partial<ILifetime> {
 
     data = {
 
-        // 状态栏高度
+        // 导航栏高度
         barHeight: 65,
-    }
+        
+        // 状态栏高度
+        barTop: 20,
+
+        // 胶囊占位
+        capsule: 94
+    };
 
     /**
      * 设置顶部状态栏高度
@@ -51,22 +85,29 @@ implements Partial<ILifetime> {
         }
 
         // 计算顶部导航栏高度
-        let barHeight =  btnPosI.height + btnPosI.top + statusBarHeight + btnPosI.bottom
+        let barHeight =  btnPosI.height + btnPosI.top + btnPosI.bottom;
+
+        // 计算胶囊展位
+        let capsule = btnPosI.right + btnPosI.width;
 
         this.setData({
 
             // 不知道为什么总是差 4px 距离
             // 别问为什么 加上就对了
-            barHeight: barHeight + 4
+            barHeight: barHeight + 4 + StatusBar.StatusBarHeightExtend,
+            barTop: statusBarHeight - StatusBar.StatusBarHeightExtend,
+            capsule: capsule
         });
 
-        Logger.log(`计算并设置 StatusBar 的高度为: ${ barHeight + 4 }px`, 
+        Logger.log(`计算并设置 StatusBar 的高度为: ${ barHeight + 4 }px, ` +
+        `状态栏高度: ${ statusBarHeight }px, 胶囊占位: ${ capsule }px`, 
         LevelLogLabel.DebugLabel, StatusBar.StatusBarLabel);
 
     }
 
     public onLoad() {
-        Logger.log("StatusBar模块加载...", 
+        
+        Logger.log("StatusBar 模块加载...", 
         LevelLogLabel.TraceLabel, LifeCycleLogLabel.OnLoadLabel, StatusBar.StatusBarLabel);
 
         this.setHeight();
@@ -74,5 +115,5 @@ implements Partial<ILifetime> {
 
 }
 
-export default StatusBar;
+export default StatusBar; 
 export { StatusBar };

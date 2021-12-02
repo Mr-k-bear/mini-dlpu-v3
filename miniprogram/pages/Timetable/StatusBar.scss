@@ -1,0 +1,105 @@
+@import "../../app.scss";
+$status-bar-left-top-icon-width: 30px;
+
+view.status-bar {
+    top: 0;
+    width: 100%;
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    background-color: #F8F8F8;
+
+    view.select {
+        flex: 1;
+        display: flex;
+        height: 100%;
+        align-items: center;
+        padding-left: 18px;
+
+        image {
+            width: $status-bar-left-top-icon-width;
+            height: $status-bar-left-top-icon-width;
+            filter: $black-filter;
+        }
+
+        view.semester {
+            height: 100%;
+            display: flex;
+            padding-left: 5px;
+            flex-direction: column;
+            justify-content: center;
+
+            view.semester-title {
+                @extend %status-bar-title;
+            }
+
+            view.semester-intro {
+                @extend %status-bar-subtitle;
+            }
+        }
+    }
+
+    view.capsule-holder {
+        flex: 1;
+        height: 100%;
+    }
+
+    view.content {
+        flex: 1;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+
+        view.week {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            height: 100%;
+
+            view.week-title {
+                @extend %status-bar-title;
+            }
+
+            view.week-intro {
+                @extend %status-bar-subtitle;
+            }
+        }
+    }
+}
+
+view.status-bar-blank {
+    width: 100%;
+}
+
+%status-bar-title {
+    font-size: 1.15em;
+    line-height: 1.15em;
+    margin-bottom: 5px;
+    color: $theme-color-light-title;
+}
+
+%status-bar-subtitle {
+    font-size: .85em;
+    line-height: .85em;
+    color: $theme-color-light-text;
+}
+
+@media (prefers-color-scheme: dark){
+
+    %status-bar-title {
+        color: $theme-color-dark-title;
+    }
+    
+    %status-bar-subtitle {
+        color: $theme-color-dark-text;
+    }
+
+    view.status-bar {
+        background-color: #191919;
+      
+        view.select image {
+            filter: $white-filter;
+        }
+    }
+}
