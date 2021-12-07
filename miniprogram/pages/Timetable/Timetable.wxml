@@ -4,20 +4,20 @@
     
     <!-- 学期选择 -->
     <view class="select">
-        <image src="/image/ui/last_semester_0.svg" />
+        <image src="/image/ui/last_semester.svg"/>
         <view class="semester">
-            <view class="semester-title">大四</view>
+            <view class="semester-title">大四-上</view>
             <view class="semester-intro">2021-2022</view>
         </view>
     </view>
 
     <!-- 周选择 -->
     <view class="content">
-        
         <view class="week">
             <view class="week-title">第1周</view>
-            <view class="week-intro">非本周</view>
+            <view class="week-intro">双击返回本周</view>
         </view>
+        <image src="/image/ui/selectArror.svg"/>
     </view>
 
     <!-- 胶囊占位 -->

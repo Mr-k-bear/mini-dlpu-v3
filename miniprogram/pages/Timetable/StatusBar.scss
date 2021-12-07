@@ -1,5 +1,7 @@
 @import "../../app.scss";
+
 $status-bar-left-top-icon-width: 30px;
+$status-bar-middle-icon-width: 15px;
 
 view.status-bar {
     top: 0;
@@ -31,10 +33,15 @@ view.status-bar {
 
             view.semester-title {
                 @extend %status-bar-title;
+                font-size: .9em;
+                line-height: .9em;
+                margin-bottom: 5px;
             }
 
             view.semester-intro {
                 @extend %status-bar-subtitle;
+                font-size: .9em;
+                line-height: .9em;
             }
         }
     }
@@ -48,7 +55,14 @@ view.status-bar {
         flex: 1;
         height: 100%;
         display: flex;
+        align-items: center;
         justify-content: center;
+
+        image {
+            width: $status-bar-middle-icon-width;
+            height: $status-bar-middle-icon-width;
+            filter: $black-filter;
+        }
 
         view.week {
             display: flex;
@@ -59,10 +73,16 @@ view.status-bar {
 
             view.week-title {
                 @extend %status-bar-title;
+                font-weight: 600;
+                font-size: 1.15em;
+                line-height: 1.15em;
+                margin-bottom: 5px;
             }
 
             view.week-intro {
                 @extend %status-bar-subtitle;
+                font-size: .85em;
+                line-height: .85em;
             }
         }
     }
@@ -73,15 +93,10 @@ view.status-bar-blank {
 }
 
 %status-bar-title {
-    font-size: 1.15em;
-    line-height: 1.15em;
-    margin-bottom: 5px;
     color: $theme-color-light-title;
 }
 
 %status-bar-subtitle {
-    font-size: .85em;
-    line-height: .85em;
     color: $theme-color-light-text;
 }
 

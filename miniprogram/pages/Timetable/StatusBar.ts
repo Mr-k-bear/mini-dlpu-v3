@@ -35,7 +35,7 @@ implements Partial<ILifetime> {
     /**
      * 导航栏高度补偿
      */
-    public static readonly StatusBarHeightExtend:number = 5;
+    public static readonly StatusBarHeightExtend:number = 2;
 
     /**
      * 页面日志输出标签
