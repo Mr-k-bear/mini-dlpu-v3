@@ -1,17 +1,34 @@
 
+$theme-color-blue: #3EA3D8;
+$theme-color-red: #FF9393;
+
+$theme-color-light-layout: #F8F8F8;
+$theme-color-light-background: #f4f0f1;
+$theme-color-light-title: rgba(0, 0, 0, .65);
+$theme-color-light-text: rgba(0, 0, 0, .55);
+
+$theme-color-dark-layout: #191919;
+$theme-color-dark-background: #1f1f1f;
+$theme-color-dark-title: rgba(255, 255, 255, .65);
+$theme-color-dark-text: rgba(255, 255, 255, .55);
+
+$black-filter: brightness(0) opacity(.65);
+$white-filter: brightness(100) opacity(.65);
+$blue-filter: opacity(.65);
+
+
+
 page {
     background-color: #f4f0f1;
-    color: rgba(0, 0, 0, .55);
+    color: $theme-color-light-text;
     font-weight: 500;
     font-size: .9em;
-    font-family: 'Lucida Sans', 
-    'Lucida Sans Regular', 'Lucida Grande', 
-    'Lucida Sans Unicode', 'Geneva', 'Verdana', 'sans-serif';
+    font-family: Hiragino Sans GB, MicroSoft YaHei;
 }
   
 @media (prefers-color-scheme: dark){
     page {
       background-color: #1f1f1f;
-      color: rgba(255, 255, 255, .55);
+      color: $theme-color-dark-text;
     }
 }

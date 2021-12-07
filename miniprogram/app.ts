@@ -1,6 +1,5 @@
-import { Logger } from "./logger/Logger";
-import { LevelLogLabel } from "./logger/LevelLogLabel";
-import { LifeCycleLogLabel } from "./logger/LifeCycleLogLabel";
+import { Logger } from "./core/Logger";
+import { LevelLogLabel, LifeCycleLogLabel } from "./core/PresetLogLabel";
 
 
 App<IAppOption>({

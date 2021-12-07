@@ -400,7 +400,7 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
                 if(this.modules[i].data !== void 0) {
                     this.context.data[`${ this.modules[i].nameSpace }$${ key }`] = 
                     ( this.modules[i].data as IAnyTypeObject )[key];
-                    // this.modules[i]
+                    this.modules[i].paramList.add(key);
                 }
             }
         }
@@ -425,7 +425,7 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
                 func.push(`[${ key }]`);
             }
 
-            let log:string = `模块 [${ this.modules[i].nameSpace }] 加载完成...\n`;
+            let log:string = `模块 [${ this.modules[i].nameSpace }] 完成绑定...\n`;
             if(data.length > 0) log += `Using Props: ${ data.join(", ") }\n`;
             if(func.length > 0) log += `Using Function: ${ func.join(", ") }\n`;
             

@@ -1,4 +1,4 @@
-import { LOGGER_FILTER, LOGGER_CONSOLE } from "./Config";
+import { LOGGER_FILTER, LOGGER_CONSOLE, LOGGER_STYLE } from "./Config";
 import { StackLogLabel } from "./PresetLogLabel";
 import { LogLabel } from "./LogLabel";
 
@@ -82,28 +82,39 @@ class Logger {
      */
     public static calcStyle(...labels:LogLabel[]):[string[], string[]] {
 
-        // 过滤出需要显示的 Labels
-        let labelsNeedRender:LogLabel[] = labels.filter((label:LogLabel)=>{
-            return label.display
-        });
-
         let consoleLabels:string[] = [];
         let consoleStyles:string[] = [];
 
         // 放置标签
-        for(let i = 0; i < labelsNeedRender.length; i++) {
+        for(let i = 0; i < labels.length; i++) {
             consoleLabels.push(labels[i].getLoggerOutput());
 
-            if (i !== ( labelsNeedRender.length - 1))
+            if (i !== ( labels.length - 1))
             consoleLabels.push("%c ");
 
-            consoleStyles.push(labelsNeedRender[i].getStyleOutput());
+            consoleStyles.push(labels[i].getStyleOutput());
 
-            if (i !== ( labelsNeedRender.length - 1))
+            if (i !== ( labels.length - 1))
             consoleStyles.push("");
         }
 
         return [consoleLabels, consoleStyles];
+    }
+
+    /**
+     * 收集计算标签没有样式
+     * @param labels 标签
+     */
+    public static calcLabel(...labels:LogLabel[]):string[] {
+
+        let consoleLabels:string[] = [];
+
+        // 放置标签
+        for(let i = 0; i < labels.length; i++) {
+            consoleLabels.push(labels[i].getTextOutput());
+        }
+
+        return consoleLabels
     }
 
     /**
@@ -122,11 +133,30 @@ class Logger {
         if(!Logger.testLog(...labels, ...attachLabel, StackLogLabel.filterUrlLabel)) 
         return content.getContent();
 
-        // 计算收集样式
-        let [consoleLabels, consoleStyles]= Logger.calcStyle(...labels, ...attachLabel);
+        // 过滤出需要渲染的 Labels
+        let labelsNeedRender:LogLabel[] = [...labels, ...attachLabel].filter((label:LogLabel)=>{
+            return true
+        });
 
-        // 调试输出
-        console.log(consoleLabels.join(""), ...consoleStyles, ...content.getContent());
+        // 使用样式输出
+        if(LOGGER_STYLE) {
+
+            // 计算收集样式
+            let [consoleLabels, consoleStyles]= Logger.calcStyle(...labelsNeedRender);
+
+            // 调试输出
+            console.log(consoleLabels.join(""), ...consoleStyles, ...content.getContent());
+        
+        } else {
+
+            // 计算收集标签
+            let consoleLabels= Logger.calcLabel(...labelsNeedRender);
+
+            // 输出
+            console.log(consoleLabels.join(" "), ...content.getContent());
+        }
+
+        
 
         return content.getContent();
     }
