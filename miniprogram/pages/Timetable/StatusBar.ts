@@ -1,5 +1,5 @@
 import { Modular, Manager, ILifetime } from "../../core/Module";
-import { LevelLogLabel, LifeCycleLogLabel, colorRadio } from "../../core/PresetLogLabel";
+import { LevelLogLabel, LifeCycleLogLabel, NormalStyle } from "../../core/PresetLogLabel";
 import { LogLabel } from "../../core/LogLabel";
 import { Logger } from "../../core/Logger";
 
@@ -41,7 +41,7 @@ implements Partial<ILifetime> {
      * 页面日志输出标签
      */
     public static readonly StatusBarLabel = new LogLabel(
-        "StatusBar", colorRadio(255, 230, 222)
+        "StatusBar", NormalStyle
     );
 
     data = {

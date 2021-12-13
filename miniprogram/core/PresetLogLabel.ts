@@ -310,4 +310,13 @@ class LifeCycleLogLabel {
     );
 }
 
-export { StackInfo, StackLogLabel, LevelLogLabel, LifeCycleLogLabel, normalLifeStyleGen as colorRadio };
+const NormalStyle = StackLogLabel.normalStyle;
+
+export { 
+    NormalStyle,
+    StackInfo, 
+    StackLogLabel, 
+    LevelLogLabel, 
+    LifeCycleLogLabel, 
+    normalLifeStyleGen as colorRadio,
+};
