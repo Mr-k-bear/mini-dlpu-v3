@@ -1,3 +1,4 @@
+import mitt, { Emitter } from "./EventEmitter";
 import { LogLabel } from "./LogLabel";
 import { Logger } from "./Logger";
 import { LevelLogLabel, colorRadio } from "./PresetLogLabel";
@@ -63,12 +64,32 @@ type IParamSetting<T extends IAnyData> = {
 }
 
 /**
+ * API 事件
+ */
+type IAPIEvent<I extends IAnyData, O extends IAnyData> = {
+    
+    /**
+     * 当数据初始化事件
+     */
+    initData: Partial<I>;
+
+    /**
+     * 请求数据解析完成后
+     */
+    parseRequestData: Partial<I>;
+}
+
+/**
  * 接口调用
  */
 class API<I extends IAnyData, O extends IAnyData> {
 
+    /**
+     * 基础 URL
+     * TODO: 这里可能涉及负载均衡
+     */
     public static get baseUrl():string {
-        return "https://xxx.xxx"
+        return "https://xxx.xxx";
     }
 
     public static defaultLogLabel:LogLabel = new LogLabel(
@@ -79,6 +100,15 @@ class API<I extends IAnyData, O extends IAnyData> {
      * Logger 使用的标签
      */
     private LogLabel:LogLabel = API.defaultLogLabel;
+
+    /**
+     * 事件监听器
+     */
+    private emitter:Emitter<IAPIEvent<I, O>>;
+
+    public get on() { return this.emitter.on };
+    public get off() { return this.emitter.on };
+    public get emit() { return this.emitter.emit };
 
     /**
      * Api 唯一 ID
@@ -105,15 +135,21 @@ class API<I extends IAnyData, O extends IAnyData> {
      */
     public requestData?:IWxRequestOption<O>;
 
-    /**
-     * 超时时间 (wx.request)
-     */
-    public timeout?:number;
+    //#region wx.request
 
-    /**
-     * 请求方法 (wx.request)
-     */
+    public timeout?:number;
     public method:HTTPMethod = HTTPMethod.GET;
+    public enableHttp2:boolean = false;
+    public enableQuic:boolean = false;
+    public enableCache:boolean = false;
+    
+    /**
+     * 是否自动解析返回的 json
+     * 对应 wx.request 的 dataType
+     */
+    public jsonParse:boolean = true;
+
+    //#endregion wx.request
 
     /**
      * 构造函数
@@ -122,6 +158,7 @@ class API<I extends IAnyData, O extends IAnyData> {
      */
     public constructor(data?: Partial<I>) {
         this.data = data ?? {};
+        this.emitter = mitt<IAPIEvent<I, O>>();
     }
 
     /**
@@ -185,6 +222,9 @@ class API<I extends IAnyData, O extends IAnyData> {
                 }
             }
         }
+
+        // 触发数据初始化事件
+        this.emit("initData", this.data);
     }
 
     /**
@@ -201,28 +241,51 @@ class API<I extends IAnyData, O extends IAnyData> {
         // 重置请求数据
         const requestData:IWxRequestOption<O> = this.requestData = {
             url: API.baseUrl + this.url,
+            data: {}, header: {},
+            timeout: this.timeout,
+            method: this.method,
+            dataType: this.jsonParse ? "json" : undefined,
+            enableHttp2: this.enableHttp2,
+            enableQuic: this.enableQuic,
+            enableCache: this.enableCache
         };
 
+        // 数据解析
+        for (let key in this.params) {
+
+            let data = this.data[key];
+            let { parse } = this.params[key];
+
+            // 数据预解析
+            if (parse !== void 0) {
+                this.data[key] = parse(data!, key, this.data as DeepReadonly<Partial<I>>);
+            }
+        }
+
+        // 触发数据解析
+        this.emit("parseRequestData", this.data);
+
+        // 数据收集
         for (let key in this.params) {
             
             let data = this.data[key];
-            let { isHeader, isTemplate, parse } = this.params[key];
-            
-            // 数据预解析
-            if (parse !== void 0) {
-                data = parse(data!, key, this.data as DeepReadonly<Partial<I>>);
-            }
+            let { isHeader, isTemplate } = this.params[key];
 
             // 加载数据
             if (!isTemplate) {
                 if (isHeader) {
-                    wx.request
+                    requestData.header![key] = data;
+                } else {
+                    (requestData.data as IAnyData)[key] = data;
                 }
             }
         }
     }
 }
 
+/**
+ * HTTP 请求类型
+ */
 enum HTTPMethod {
     OPTIONS = "OPTIONS", 
     GET = "GET", 

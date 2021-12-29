@@ -33,7 +33,8 @@ implements Partial<ILifetime> {
         
             public override params: IParamSetting<ITestApiInput> = {
                 name: {
-                    tester: "123"
+                    tester: "123",
+                    isHeader: true
                 },
                 id: {
                     parse: (i) => ++i,
@@ -43,8 +44,15 @@ implements Partial<ILifetime> {
 
             public constructor(data:ITestApiInput) {
                 super(data);
+                this.on("initData", (data) => {
+                    console.log("initData", data)
+                })
+                this.on("parseRequestData", (data) => {
+                    console.log("parseRequestData", data)
+                })
                 this.initLabel();
                 this.initData();
+                this.collectData();
             }
         }
 
