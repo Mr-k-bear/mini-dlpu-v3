@@ -6,6 +6,8 @@ interface IAnyData {
     [x:string]: any
 }
 
+type IWxRequestOption<O> = WechatMiniprogram.RequestOption<O>;
+
 type DeepReadonly<T> = {
     readonly [P in keyof T]: DeepReadonly<T[P]>;
 };
@@ -22,14 +24,26 @@ type IParamSetting<T extends IAnyData> = {
         defaultValue?: T[P],
 
         /**
-         * 测试
+         * ### 数据测试
+         * 1、支持正则表达式测试 \
+         * 2、支持使用 string === string 测试 \
+         * 3、支持使用 number === number 测试 \
+         * 4、支持使用自定义函数测试 
          */
-        tester?: RegExp | ((data:T[P]) => boolean) | string,
+        tester?: RegExp | ((data:T[P]) => boolean) | string | number,
 
         /**
-         * 预解析函数
+         * ### 预解析函数
+         * 1、此函数用来处理该键值 \
+         * 2、当返回 undefined 时此键值被遗弃 \
+         * 3、返回值时，此键值被覆盖
+         * 
+         * @param data 当前给定数据
+         * @param key 当前给定数据键值
+         * @param all 全部输入数据
+         * @returns 解析结果
          */
-        parse?: ((data:T[P], key:string, all:DeepReadonly<Partial<T>>) => T[P]),
+        parse?: ((data:T[P], key:string, all:DeepReadonly<Partial<T>>) => T[P] | undefined),
 
         /**
          * 是否为请求头数据
@@ -53,6 +67,10 @@ type IParamSetting<T extends IAnyData> = {
  */
 class API<I extends IAnyData, O extends IAnyData> {
 
+    public static get baseUrl():string {
+        return "https://xxx.xxx"
+    }
+
     public static defaultLogLabel:LogLabel = new LogLabel(
         `API:API`, colorRadio(200, 120, 222)
     );
@@ -68,6 +86,11 @@ class API<I extends IAnyData, O extends IAnyData> {
     public key:string = "API";
 
     /**
+     * API url
+     */
+    public url:string = "/";
+
+    /**
      * API 需要的参数列表
      */
     public params:IParamSetting<I> = {} as any;
@@ -75,19 +98,29 @@ class API<I extends IAnyData, O extends IAnyData> {
     /**
      * API 需要的数据
      */
-    public data:Partial<I>;
+    public data?:Partial<I>;
 
     /**
      * 请求数据
      */
-    public requestData:IAnyData = {} as any;
+    public requestData?:IWxRequestOption<O>;
+
+    /**
+     * 超时时间 (wx.request)
+     */
+    public timeout?:number;
+
+    /**
+     * 请求方法 (wx.request)
+     */
+    public method:HTTPMethod = HTTPMethod.GET;
 
     /**
      * 构造函数
      * 注意：data 是不安全的，请传入数据副本
      * @param data API需要的全部数据
      */
-    public constructor(data? :Partial<I>) {
+    public constructor(data?: Partial<I>) {
         this.data = data ?? {};
     }
 
@@ -104,31 +137,38 @@ class API<I extends IAnyData, O extends IAnyData> {
      * 初始化数据
      */
     public initData() {
-        for(let key in this.params) {
+
+        if (this.data === void 0) {
+            Logger.log(`数据初始化异常: 没有输入 [data] 数据!`, 
+            LevelLogLabel.FatalLabel, this.LogLabel);
+            return;
+        }
+
+        for (let key in this.params) {
 
             let data = this.data[key];
-            let { defaultValue, Optional, tester, parse } = this.params[key];
+            let { defaultValue, Optional, tester } = this.params[key];
 
             // 默认值赋予
-            if(data === void 0 && defaultValue !== void 0) {
+            if (data === void 0 && defaultValue !== void 0) {
                 this.data[key] = defaultValue;
             }
 
             // 数据存在测试
-            if(data === void 0 && !Optional) {
+            if (data === void 0 && !Optional) {
                 Logger.log(`数据校验异常: 数据 [${key}] 是必须的，但是并没有接收到!`, 
                 LevelLogLabel.FatalLabel, this.LogLabel);
             }
 
             // 用户自定义测试
-            if(data !== void 0 && tester !== void 0) {
+            if (data !== void 0 && tester !== void 0) {
                 let testRes:boolean = false;
                 
-                if(tester instanceof RegExp) {
+                if (tester instanceof RegExp) {
                     testRes = tester.test(data!);
-                } else if(typeof tester === "string") {
+                } else if (typeof tester === "string" || typeof tester === "number") {
                     testRes = tester === data;
-                } else if(tester instanceof Function) {
+                } else if (tester instanceof Function) {
                     testRes = tester(data!);
                 } else {
                     Logger.logMultiple(
@@ -137,17 +177,12 @@ class API<I extends IAnyData, O extends IAnyData> {
                     );
                 }
 
-                if(!testRes) {
+                if (!testRes) {
                     Logger.logMultiple(
                         [LevelLogLabel.FatalLabel, this.LogLabel],
                         `数据校验异常: [${ key }] 参数数据未通过自定义的 tester:`, data
                     );
                 }
-            }
-
-            // 数据预解析
-            if(parse !== void 0 && data !== void 0) {
-                this.data[key] = parse(data!, key, this.data as DeepReadonly<Partial<I>>);
             }
         }
     }
@@ -155,7 +190,48 @@ class API<I extends IAnyData, O extends IAnyData> {
     /**
      * 收集请求数据
      */
-    public collectData() {}
+    public collectData() {
+
+        if (this.data === void 0) {
+            Logger.log(`收集请求数据异常: 没有输入 [data] 数据!`, 
+            LevelLogLabel.FatalLabel, this.LogLabel);
+            return;
+        }
+
+        // 重置请求数据
+        const requestData:IWxRequestOption<O> = this.requestData = {
+            url: API.baseUrl + this.url,
+        };
+
+        for (let key in this.params) {
+            
+            let data = this.data[key];
+            let { isHeader, isTemplate, parse } = this.params[key];
+            
+            // 数据预解析
+            if (parse !== void 0) {
+                data = parse(data!, key, this.data as DeepReadonly<Partial<I>>);
+            }
+
+            // 加载数据
+            if (!isTemplate) {
+                if (isHeader) {
+                    wx.request
+                }
+            }
+        }
+    }
+}
+
+enum HTTPMethod {
+    OPTIONS = "OPTIONS", 
+    GET = "GET", 
+    HEAD = "HEAD", 
+    POST = "POST", 
+    PUT = "PUT", 
+    DELETE = "DELETE", 
+    TRACE = "TRACE", 
+    CONNECT = "CONNECT"
 }
 
 export default API;
