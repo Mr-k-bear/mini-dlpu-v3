@@ -13,8 +13,9 @@ interface IAppAPIParam {
 
         /**
          * 请求池
+         * 保存正在等待的 API 请求
          */
-        pool: API<IAnyData, IAnyData>[];
+        pool: Set<API<IAnyData, IAnyData>>;
     }
 }
 
@@ -160,7 +161,8 @@ class API<I extends IAnyData, O extends IAnyData> extends EventEmitter<IAPIEvent
     /**
      * 初始化标签
      */
-    public initLabel() {
+    public initLabel(key: string) {
+        this.key = key;
         this.LogLabel = new LogLabel(
             `API:${ this.key }`, colorRadio(200, 120, 222)
         );
@@ -171,14 +173,14 @@ class API<I extends IAnyData, O extends IAnyData> extends EventEmitter<IAPIEvent
      * 注意：data 是不安全的，请传入数据副本
      * @param data API需要的全部数据
      */
-    public param(data?: Partial<I>) {
+    public param(data?: Partial<I>):this {
 
         this.data = data;
 
         if (this.data === void 0) {
             Logger.log(`数据初始化异常: 没有输入 [data] 数据!`, 
             LevelLogLabel.FatalLabel, this.LogLabel);
-            return;
+            return this;
         }
 
         for (let key in this.params) {
@@ -226,12 +228,6 @@ class API<I extends IAnyData, O extends IAnyData> extends EventEmitter<IAPIEvent
         // 触发数据初始化事件
         this.emit("initData", this.data);
 
-        if (this.data === void 0) {
-            Logger.log(`收集请求数据异常: 没有输入 [data] 数据!`, 
-            LevelLogLabel.FatalLabel, this.LogLabel);
-            return;
-        }
-
         // 重置请求数据
         const requestData:IWxRequestOption<O> = this.requestData = {
             url: API.baseUrl + this.url,
@@ -274,6 +270,44 @@ class API<I extends IAnyData, O extends IAnyData> extends EventEmitter<IAPIEvent
                 }
             }
         }
+
+        return this;
+    }
+
+    /**
+     * 请求的唯一标识符
+     */
+    protected id:number = 0;
+
+    /**
+     * 将此请求加入到请求池
+     */
+    protected addPool() {
+        
+        let app = getApp<IAppAPIParam>();
+
+        // 获取标识符
+        if (!this.id) {
+            this.id = app.api.nextId;
+            app.api.nextId ++;
+        }
+
+        app.api.pool.add(this as any);
+    }
+
+    /**
+     * 从 pool 中移除
+     */
+    protected removePool() {
+        let app = getApp<IAppAPIParam>();
+        app.api.pool.delete(this as any);
+    }
+
+    /**
+     * 运行 API
+     */
+    public run() {
+        this.addPool();
     }
 }
 

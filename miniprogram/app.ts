@@ -11,7 +11,7 @@ App<IAppAPIParam>({
      */
     api: {
         nextId: 1,
-        pool: []
+        pool: new Set()
     },
 
     /**
