@@ -1,5 +1,6 @@
 import { Manager} from "../../core/Module";
 import { StatusBar } from "./StatusBar";
+import { TestCore } from "./TestCore";
 
 /**
  * 此页面使用 Manager 进行模块化管理
@@ -7,4 +8,5 @@ import { StatusBar } from "./StatusBar";
  */
 Manager.Page((manager)=>{
     manager.addModule(StatusBar, "statusBar");
+    manager.addModule(TestCore, "testCore");
 })

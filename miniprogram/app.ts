@@ -1,15 +1,23 @@
+import { IAppAPIParam } from "./core/Api";
 import { Logger } from "./core/Logger";
 import { LevelLogLabel, LifeCycleLogLabel } from "./core/PresetLogLabel";
 
-import { Storage } from "./core/Storage";
 
+App<IAppAPIParam>({
 
-App({
+    /**
+     * API 模块需要的全局数据
+     * 参见 "/core/Api"
+     */
+    api: {
+        nextId: 1,
+        pool: []
+    },
 
     /**
      * 存储缓存键值
      */
-    storageCache: new Set<string>(),
+    // storageCache: new Set<string>(),
 
     /**
      * 小程序加载时
@@ -17,14 +25,5 @@ App({
     onLaunch() {
         Logger.log("小程序启动...", 
         LevelLogLabel.TraceLabel, LifeCycleLogLabel.OnLaunchLabel);
-
-        let s = new Storage("test", {
-            a: new Date(),
-            be: 2
-        });
-
-        setTimeout(() => {
-            s.set("be", 12);
-        }, 1000)
     }
 })
