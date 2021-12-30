@@ -42,21 +42,24 @@ implements Partial<ILifetime> {
                 info: {}
             }
 
-            public constructor(data:ITestApiInput) {
-                super(data);
-                this.on("initData", (data) => {
-                    console.log("initData", data)
+            public constructor() {
+                super();
+                this.initLabel();
+
+                this.emit("initData", {})
+
+                this.on("initData", (d) => {
+
                 })
+
                 this.on("parseRequestData", (data) => {
                     console.log("parseRequestData", data)
                 })
-                this.initLabel();
-                this.initData();
-                this.collectData();
             }
         }
 
-        let api = new TestApi({
+        let api = new TestApi();
+        api.param({
             name: "123",
             id: 456,
             info: {

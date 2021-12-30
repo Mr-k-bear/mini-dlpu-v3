@@ -1,7 +1,22 @@
-import mitt, { Emitter } from "./EventEmitter";
+import { EventEmitter } from "./EventEmitter";
 import { LogLabel } from "./LogLabel";
 import { Logger } from "./Logger";
 import { LevelLogLabel, colorRadio } from "./PresetLogLabel";
+
+interface IAppAPIParam {
+    api: {
+
+        /**
+         * API 编号
+         */
+        nextId: number;
+
+        /**
+         * 请求池
+         */
+        pool: API<IAnyData, IAnyData>[];
+    }
+}
 
 interface IAnyData {
     [x:string]: any
@@ -82,7 +97,7 @@ type IAPIEvent<I extends IAnyData, O extends IAnyData> = {
 /**
  * 接口调用
  */
-class API<I extends IAnyData, O extends IAnyData> {
+class API<I extends IAnyData, O extends IAnyData> extends EventEmitter<IAPIEvent<I, O>> {
 
     /**
      * 基础 URL
@@ -100,15 +115,6 @@ class API<I extends IAnyData, O extends IAnyData> {
      * Logger 使用的标签
      */
     private LogLabel:LogLabel = API.defaultLogLabel;
-
-    /**
-     * 事件监听器
-     */
-    private emitter:Emitter<IAPIEvent<I, O>>;
-
-    public get on() { return this.emitter.on };
-    public get off() { return this.emitter.on };
-    public get emit() { return this.emitter.emit };
 
     /**
      * Api 唯一 ID
@@ -152,16 +158,6 @@ class API<I extends IAnyData, O extends IAnyData> {
     //#endregion wx.request
 
     /**
-     * 构造函数
-     * 注意：data 是不安全的，请传入数据副本
-     * @param data API需要的全部数据
-     */
-    public constructor(data?: Partial<I>) {
-        this.data = data ?? {};
-        this.emitter = mitt<IAPIEvent<I, O>>();
-    }
-
-    /**
      * 初始化标签
      */
     public initLabel() {
@@ -172,8 +168,12 @@ class API<I extends IAnyData, O extends IAnyData> {
 
     /**
      * 初始化数据
+     * 注意：data 是不安全的，请传入数据副本
+     * @param data API需要的全部数据
      */
-    public initData() {
+    public param(data?: Partial<I>) {
+
+        this.data = data;
 
         if (this.data === void 0) {
             Logger.log(`数据初始化异常: 没有输入 [data] 数据!`, 
@@ -225,12 +225,6 @@ class API<I extends IAnyData, O extends IAnyData> {
 
         // 触发数据初始化事件
         this.emit("initData", this.data);
-    }
-
-    /**
-     * 收集请求数据
-     */
-    public collectData() {
 
         if (this.data === void 0) {
             Logger.log(`收集请求数据异常: 没有输入 [data] 数据!`, 
@@ -298,4 +292,4 @@ enum HTTPMethod {
 }
 
 export default API;
-export { API, IParamSetting }
+export { API, IParamSetting, IAppAPIParam, HTTPMethod }
