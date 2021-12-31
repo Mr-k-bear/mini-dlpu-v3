@@ -467,6 +467,44 @@ class API<I extends IAnyData, O extends IAnyData> extends Emitter<IAPIEvent<I, O
 
         return this;
     }
+
+    /**
+     * 等待结果
+     */
+    public wait(): Promise<IRespondData<O>>;
+    public wait(callBack?: ICallBack<O>): this;
+    public wait(callBack?: ICallBack<O>): Promise<IRespondData<O>> | this {
+        
+        // 存在 callback 使用传统回调
+        if (callBack) {
+            callBack.success && this.on("success", callBack.success);
+            callBack.fail && this.on("fail", callBack.fail);
+            callBack.complete && this.on("complete", callBack.complete);
+            return this;
+        } 
+        
+        // 不存在 callback 使用 Promise 对象
+        else {
+            return new Promise((r) => {
+                this.on("success", r);
+                this.on("fail", r);
+            });
+        }
+    }
+}
+
+/**
+ * 自动响应数据
+ */
+type IRespondData<O extends IAnyData> = Partial<IAPIEvent<IAnyData, O>["success"]> & IAPIEvent<IAnyData, O>["fail"];
+
+/**
+ * 回调对象
+ */
+interface ICallBack<O extends IAnyData> {
+    success?: (data: IAPIEvent<{}, O>["success"]) => any;
+    fail?: (data: IAPIEvent<{}, O>["fail"]) => any;
+    complete?: (data: IAPIEvent<{}, O>["complete"]) => any;
 }
 
 /**
@@ -515,4 +553,4 @@ enum HTTPMethod {
 }
 
 export default API;
-export { API, IParamSetting, IAppAPIParam, HTTPMethod, RequestPolicy }
+export { API, IParamSetting, IAppAPIParam, ICallBack, HTTPMethod, RequestPolicy }
