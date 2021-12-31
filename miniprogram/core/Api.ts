@@ -181,7 +181,7 @@ class API<I extends IAnyData, O extends IAnyData> extends Emitter<IAPIEvent<I, O
     /**
      * 初始化标签
      */
-    public initLabel(key: string) {
+    public initDebugLabel(key: string) {
         this.key = key;
         this.LogLabel = new LogLabel(
             `API:${ this.key }`, colorRadio(200, 120, 222)

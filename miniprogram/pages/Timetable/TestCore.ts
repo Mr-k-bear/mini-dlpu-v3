@@ -42,7 +42,7 @@ implements Partial<ILifetime> {
 
             public constructor() {
                 super();
-                this.initLabel("TestApi");
+                this.initDebugLabel("TestApi");
             }
         }
 
