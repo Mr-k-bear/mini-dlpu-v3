@@ -1,7 +1,5 @@
-import { EventEmitter, EventType } from "./EventEmitter";
-import { LogLabel, LogStyle } from "./LogLabel";
-import { Logger } from "./Logger";
-import { LevelLogLabel } from "./PresetLogLabel";
+import { Emitter, EventType } from "./Emitter";
+import { Logger, LogLabel, LogStyle, LevelLogLabel } from "./Logger";
 
 /**
  * 自定义对象类型
@@ -64,7 +62,7 @@ class Modular<
     DEP extends Depends<M> = Depends<M>,
     E   extends Record<EventType, unknown> = Record<EventType, unknown>,
     TD  extends IAnyTypeObject = IAnyTypeObject>
-extends EventEmitter<E>
+extends Emitter<E>
 implements WXContext<TD, IAnyTypeObject> {
 
     // [x:string]: any;

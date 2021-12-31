@@ -1,6 +1,5 @@
 import { IAppAPIParam } from "./core/Api";
-import { Logger } from "./core/Logger";
-import { LevelLogLabel, LifeCycleLogLabel } from "./core/PresetLogLabel";
+import { Logger, LevelLogLabel, LifeCycleLogLabel } from "./core/Logger";
 
 
 App<IAppAPIParam>({

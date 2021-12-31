@@ -1,7 +1,5 @@
 import { Modular, Manager, ILifetime } from "../../core/Module";
-import { LevelLogLabel, LifeCycleLogLabel, NormalStyle } from "../../core/PresetLogLabel";
-import { LogLabel } from "../../core/LogLabel";
-import { Logger } from "../../core/Logger";
+import { Logger, LogLabel, LevelLogLabel, LifeCycleLogLabel, NormalStyle } from "../../core/Logger";
 
 /**
  * 在 UI 中显示的数据

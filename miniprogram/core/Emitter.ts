@@ -22,7 +22,7 @@ type GenericEventHandler<Events extends Record<EventType, unknown>> =
 	| Handler<Events[keyof Events]>
 	| WildcardHandler<Events>;
 
-export class EventEmitter<Events extends Record<EventType, unknown>> {
+export class Emitter<Events extends Record<EventType, unknown>> {
 	
 	/**
 	 * A Map of event names to registered handler functions.
