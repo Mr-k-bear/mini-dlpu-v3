@@ -1,6 +1,4 @@
-import { LogLabel } from "./LogLabel";
-import { Logger } from "./Logger";
-import { LevelLogLabel, colorRadio } from "./PresetLogLabel";
+import { Logger, LogLabel, LevelLogLabel, colorRadio } from "./Logger";
 
 /**
  * 状态

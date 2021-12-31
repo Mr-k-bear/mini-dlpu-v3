@@ -1,8 +1,5 @@
 import { EventEmitter } from "./EventEmitter";
-import { LogLabel } from "./LogLabel";
-import { Logger } from "./Logger";
-import { LevelLogLabel, colorRadio, StatusLabel } from "./PresetLogLabel";
-
+import { Logger, LogLabel, LevelLogLabel, colorRadio, StatusLabel } from "./Logger";
 interface IAppAPIParam {
     api: {
 
@@ -518,4 +515,4 @@ enum HTTPMethod {
 }
 
 export default API;
-export { API, IParamSetting, IAppAPIParam, HTTPMethod }
+export { API, IParamSetting, IAppAPIParam, HTTPMethod, RequestPolicy }

@@ -1,7 +1,5 @@
 import { EventEmitter, EventType } from "./EventEmitter";
-import { LogLabel, LogStyle } from "./LogLabel";
-import { Logger } from "./Logger";
-import { LevelLogLabel } from "./PresetLogLabel";
+import { Logger, LogLabel, LogStyle, LevelLogLabel } from "./Logger";
 
 /**
  * 自定义对象类型
