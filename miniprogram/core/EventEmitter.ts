@@ -33,6 +33,14 @@ export class EventEmitter<Events extends Record<EventType, unknown>> {
 		this.all = new Map();
 	}
 
+	public resetAll() {
+		this.all = new Map();
+	}
+
+	public reset<Key extends keyof Events>(type: Key) {
+		this.all!.set(type, [] as EventHandlerList<Events[keyof Events]>);
+	}
+
 	on<Key extends keyof Events>(type: Key, handler: Handler<Events[Key]>): void;
 	on(type: '*', handler: WildcardHandler<Events>): void;
 

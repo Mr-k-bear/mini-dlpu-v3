@@ -28,8 +28,6 @@ implements Partial<ILifetime> {
         }
         
         class TestApi extends API<ITestApiInput, {}> {
-
-            public override key:string = "TestApi";
         
             public override params: IParamSetting<ITestApiInput> = {
                 name: {
@@ -44,17 +42,7 @@ implements Partial<ILifetime> {
 
             public constructor() {
                 super();
-                this.initLabel();
-
-                this.emit("initData", {})
-
-                this.on("initData", (d) => {
-
-                })
-
-                this.on("parseRequestData", (data) => {
-                    console.log("parseRequestData", data)
-                })
+                this.initLabel("TestApi");
             }
         }
 
@@ -65,8 +53,7 @@ implements Partial<ILifetime> {
             info: {
                 data: "abc"
             }
-        });
-        console.log(api);
+        }).request();
     }
 }
 

@@ -310,12 +310,37 @@ class LifeCycleLogLabel {
     );
 }
 
+class StatusLabel {
+
+    /**
+     * 等待
+     */
+    static readonly Pending = new LogLabel(
+        "◉", new LogStyle().setBlank("0 2px").setBorder("1000px", "1px solid lightblue").setColor("lightblue")
+    );
+
+    /**
+     * 成功
+     */
+    static readonly Success = new LogLabel(
+        "√", new LogStyle().setBlank("0 4px").setBorder("1000px", "1px solid lightgreen").setColor("lightgreen")
+    );
+
+    /**
+     * 失败
+     */
+    static readonly Failed = new LogLabel(
+        "×", new LogStyle().setBlank("0 4px").setBorder("1000px", "1px solid red").setColor("red")
+    );
+}
+
 const NormalStyle = StackLogLabel.normalStyle;
 
 export { 
     NormalStyle,
     StackInfo, 
-    StackLogLabel, 
+    StackLogLabel,
+    StatusLabel, 
     LevelLogLabel, 
     LifeCycleLogLabel, 
     normalLifeStyleGen as colorRadio,

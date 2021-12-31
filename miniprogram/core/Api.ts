@@ -1,7 +1,7 @@
 import { EventEmitter } from "./EventEmitter";
 import { LogLabel } from "./LogLabel";
 import { Logger } from "./Logger";
-import { LevelLogLabel, colorRadio } from "./PresetLogLabel";
+import { LevelLogLabel, colorRadio, StatusLabel } from "./PresetLogLabel";
 
 interface IAppAPIParam {
     api: {
@@ -13,8 +13,9 @@ interface IAppAPIParam {
 
         /**
          * 请求池
+         * 保存正在等待的 API 请求
          */
-        pool: API<IAnyData, IAnyData>[];
+        pool: Set<API<IAnyData, IAnyData>>;
     }
 }
 
@@ -78,6 +79,9 @@ type IParamSetting<T extends IAnyData> = {
     }
 }
 
+type SuccessCallbackResult<O extends IAnyData> = WechatMiniprogram.RequestSuccessCallbackResult<O>;
+type GeneralCallbackResult = WechatMiniprogram.GeneralCallbackResult;
+
 /**
  * API 事件
  */
@@ -92,6 +96,26 @@ type IAPIEvent<I extends IAnyData, O extends IAnyData> = {
      * 请求数据解析完成后
      */
     parseRequestData: Partial<I>;
+
+    /**
+     * 请求发送前
+     */
+    request: IWxRequestOption<O>;
+
+    /**
+     * 成功回调
+     */
+    success: SuccessCallbackResult<O>;
+
+    /**
+     * 失败回调
+     */
+    fail: GeneralCallbackResult;
+
+    /**
+     * 完成回调
+     */
+    complete: GeneralCallbackResult;
 }
 
 /**
@@ -104,7 +128,7 @@ class API<I extends IAnyData, O extends IAnyData> extends EventEmitter<IAPIEvent
      * TODO: 这里可能涉及负载均衡
      */
     public static get baseUrl():string {
-        return "https://xxx.xxx";
+        return "https://blog.mrkbear.com";
     }
 
     public static defaultLogLabel:LogLabel = new LogLabel(
@@ -160,10 +184,33 @@ class API<I extends IAnyData, O extends IAnyData> extends EventEmitter<IAPIEvent
     /**
      * 初始化标签
      */
-    public initLabel() {
+    public initLabel(key: string) {
+        this.key = key;
         this.LogLabel = new LogLabel(
             `API:${ this.key }`, colorRadio(200, 120, 222)
         );
+
+        // 添加 API 生命周期调试事件
+        this.on("request", (data) => {
+            Logger.logMultiple(
+                [LevelLogLabel.InfoLabel, this.LogLabel, StatusLabel.Pending], 
+                `请求发送中: `, data
+            );
+        })
+
+        this.on("success", (data) => {
+            Logger.logMultiple(
+                [LevelLogLabel.InfoLabel, this.LogLabel, StatusLabel.Success], 
+                `请求成功: `, data
+            );
+        })
+
+        this.on("fail", (data) => {
+            Logger.logMultiple(
+                [LevelLogLabel.ErrorLabel, this.LogLabel, StatusLabel.Failed], 
+                `请求失败: `, data.errMsg
+            );
+        })
     }
 
     /**
@@ -171,14 +218,14 @@ class API<I extends IAnyData, O extends IAnyData> extends EventEmitter<IAPIEvent
      * 注意：data 是不安全的，请传入数据副本
      * @param data API需要的全部数据
      */
-    public param(data?: Partial<I>) {
+    public param(data?: Partial<I>):this {
 
         this.data = data;
 
         if (this.data === void 0) {
             Logger.log(`数据初始化异常: 没有输入 [data] 数据!`, 
-            LevelLogLabel.FatalLabel, this.LogLabel);
-            return;
+            LevelLogLabel.ErrorLabel, this.LogLabel);
+            return this;
         }
 
         for (let key in this.params) {
@@ -194,7 +241,7 @@ class API<I extends IAnyData, O extends IAnyData> extends EventEmitter<IAPIEvent
             // 数据存在测试
             if (data === void 0 && !Optional) {
                 Logger.log(`数据校验异常: 数据 [${key}] 是必须的，但是并没有接收到!`, 
-                LevelLogLabel.FatalLabel, this.LogLabel);
+                LevelLogLabel.ErrorLabel, this.LogLabel);
             }
 
             // 用户自定义测试
@@ -209,14 +256,14 @@ class API<I extends IAnyData, O extends IAnyData> extends EventEmitter<IAPIEvent
                     testRes = tester(data!);
                 } else {
                     Logger.logMultiple(
-                        [LevelLogLabel.FatalLabel, this.LogLabel],
+                        [LevelLogLabel.ErrorLabel, this.LogLabel],
                         `数据校验异常: [${ key }] 参数存在未知类型的 tester:`, tester
                     );
                 }
 
                 if (!testRes) {
                     Logger.logMultiple(
-                        [LevelLogLabel.FatalLabel, this.LogLabel],
+                        [LevelLogLabel.ErrorLabel, this.LogLabel],
                         `数据校验异常: [${ key }] 参数数据未通过自定义的 tester:`, data
                     );
                 }
@@ -225,12 +272,6 @@ class API<I extends IAnyData, O extends IAnyData> extends EventEmitter<IAPIEvent
 
         // 触发数据初始化事件
         this.emit("initData", this.data);
-
-        if (this.data === void 0) {
-            Logger.log(`收集请求数据异常: 没有输入 [data] 数据!`, 
-            LevelLogLabel.FatalLabel, this.LogLabel);
-            return;
-        }
 
         // 重置请求数据
         const requestData:IWxRequestOption<O> = this.requestData = {
@@ -274,7 +315,192 @@ class API<I extends IAnyData, O extends IAnyData> extends EventEmitter<IAPIEvent
                 }
             }
         }
+
+        return this;
     }
+
+    /**
+     * 请求的唯一标识符
+     */
+    protected id:number = 0;
+
+    /**
+     * 将此请求加入到请求池
+     */
+    protected addPool():this {
+        
+        let app = getApp<IAppAPIParam>();
+        if (app.api.pool.has(this as any)) {
+            return this;
+        }
+
+        // 获取标识符
+        if (!this.id) {
+            this.id = app.api.nextId;
+            app.api.nextId ++;
+        }
+
+        app.api.pool.add(this as any);
+        return this;
+    }
+
+    /**
+     * 从 pool 中移除
+     */
+    protected removePool():this {
+        let app = getApp<IAppAPIParam>();
+        app.api.pool.delete(this as any);
+        return this;
+    }
+
+    /**
+     * 寻找相似的请求
+     */
+    protected findSameAPI():API<IAnyData, IAnyData> | undefined {
+
+        if (this.requestData === void 0) {
+            Logger.log(`搜索相似请求异常: 没有收集 [requestData] 数据!`, 
+            LevelLogLabel.ErrorLabel, this.LogLabel);
+            return;
+        }
+
+        let app = getApp<IAppAPIParam>();
+        let sameAPI:API<IAnyData, IAnyData> | undefined;
+
+        // 判断 API 是否相似
+        app.api.pool.forEach((api) => {
+            if (api === this) return;
+            if (!api.requestData) return;
+            if (api.requestData!.url !== this.requestData!.url) return;
+            if (api.requestData!.method !== this.requestData!.method) return;
+            sameAPI = api;
+        });
+
+        return sameAPI;
+    }
+
+    /**
+     * 标记此实例是否已被使用
+     */
+    private isUsed = false;
+
+    /**
+     * 请求策略
+     */
+    public policy:RequestPolicy = RequestPolicy.RequestAnyway;
+
+    /**
+     * 运行 API
+     */
+    public request():this {
+
+        if (this.requestData === void 0) {
+            Logger.log(`请求发送异常: 没有收集 [requestData] 数据!`, 
+            LevelLogLabel.ErrorLabel, this.LogLabel);
+            return this;
+        }
+
+        if (this.isUsed) {
+            Logger.log(`请求发送异常: 此实例已经使用过了，请使用新实例操作`, 
+            LevelLogLabel.ErrorLabel, this.LogLabel);
+            return this;
+        } else {
+            this.isUsed = true;
+        }
+        
+        // 加入请求池
+        this.addPool();
+
+        // 发起请求
+        let request = () => {
+
+            // 触发请求发送事件
+            this.emit("request", this.requestData!)
+
+            wx.request<O>({
+                ...this.requestData!,
+                success: (e) => {
+                    this.emit("success", e);
+                },
+                fail: (e) => {
+                    this.emit("fail", e);
+                },
+                complete: (e) => {
+                    this.emit("complete", e);
+                }
+            });
+        }
+
+        if (this.policy !== RequestPolicy.RequestAnyway) {
+            let lastAPI = this.findSameAPI();
+
+            if (lastAPI) {
+
+                // 被上次请求阻止
+                if (this.policy === RequestPolicy.BlockByLastRequest) {
+                    return this;
+                }
+
+                // 使用上次请求结果
+                if (this.policy === RequestPolicy.useLastRequest) {
+                    lastAPI.on("success", (e) => {
+                        this.emit("success", e as SuccessCallbackResult<O>);
+                        this.emit("complete", {errMsg: e.errMsg});
+                    });
+                    lastAPI.on("fail", (e) => {
+                        this.emit("fail", e);
+                        this.emit("complete", {errMsg: e.errMsg});
+                    });
+                }
+
+                // 等待上次请求
+                if (this.policy === RequestPolicy.waitLastRequest) {
+                    lastAPI.on("success", () => request());
+                    lastAPI.on("fail", () => request());
+                }
+            }
+        } else {
+            request();
+        }
+
+        // 监听请求完成后，从 pool 中移除，释放内存
+        this.on("complete", () => {
+            this.removePool();
+        })
+
+        return this;
+    }
+}
+
+/**
+ * Request 请求策略
+ * 此策略用于节流
+ */
+enum RequestPolicy {
+
+    /**
+     * 什么都不管，发就完了
+     */
+    RequestAnyway = 1,
+
+    /**
+     * 如果存在等待中的相似请求
+     * 等待相似请求结束后在发送
+     */
+    waitLastRequest = 2,
+
+    /**
+     * 如果存在等待中的相似请求
+     * 阻止本次请求发送
+     * 将相似请求的结果作为本次请求结果
+     */
+    useLastRequest = 3,
+
+    /**
+     * 如果存在等待中的相似请求
+     * 阻止本次请求发送
+     */
+    BlockByLastRequest = 4
 }
 
 /**
