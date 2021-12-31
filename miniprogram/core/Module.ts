@@ -404,7 +404,7 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
             if(data.length > 0) log += `Using Props: ${ data.join(", ") }\n`;
             if(func.length > 0) log += `Using Function: ${ func.join(", ") }\n`;
             
-            Logger.log(log, LevelLogLabel.TraceLabel, Manager.AddModuleLabel);
+            Logger.log(log, LevelLogLabel.InfoLabel, Manager.AddModuleLabel);
         }
 
         return res;

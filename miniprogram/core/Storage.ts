@@ -131,7 +131,7 @@ class Storage<T extends IStorageData> {
 
                 success: (data) => {
                     Logger.log(`数据保存成功! errMsg: ${ data.errMsg }`, 
-                    LevelLogLabel.TraceLabel, this.StorageLogLabel);
+                    LevelLogLabel.InfoLabel, this.StorageLogLabel);
                 },
 
                 fail: (data) => {

@@ -101,14 +101,14 @@ implements Partial<ILifetime> {
 
         Logger.log(`计算并设置 StatusBar 的高度为: ${ barHeight + 4 }px, ` +
         `状态栏高度: ${ statusBarHeight }px, 胶囊占位: ${ capsule }px`, 
-        LevelLogLabel.DebugLabel, StatusBar.StatusBarLabel);
+        LevelLogLabel.InfoLabel, StatusBar.StatusBarLabel);
 
     }
 
     public onLoad() {
         
         Logger.log("StatusBar 模块加载...", 
-        LevelLogLabel.TraceLabel, LifeCycleLogLabel.OnLoadLabel, StatusBar.StatusBarLabel);
+        LevelLogLabel.InfoLabel, LifeCycleLogLabel.OnLoadLabel, StatusBar.StatusBarLabel);
 
         this.setHeight();
     }

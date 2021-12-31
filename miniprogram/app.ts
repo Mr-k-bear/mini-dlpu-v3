@@ -24,6 +24,6 @@ App<IAppAPIParam>({
      */
     onLaunch() {
         Logger.log("小程序启动...", 
-        LevelLogLabel.TraceLabel, LifeCycleLogLabel.OnLaunchLabel);
+        LevelLogLabel.InfoLabel, LifeCycleLogLabel.OnLaunchLabel);
     }
 })

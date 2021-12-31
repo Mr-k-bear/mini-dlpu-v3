@@ -43,16 +43,6 @@ implements Partial<ILifetime> {
             public constructor() {
                 super();
                 this.initLabel("TestApi");
-
-                this.emit("initData", {})
-
-                this.on("initData", (d) => {
-
-                })
-
-                this.on("parseRequestData", (data) => {
-                    console.log("parseRequestData", data)
-                })
             }
         }
 
@@ -63,8 +53,7 @@ implements Partial<ILifetime> {
             info: {
                 data: "abc"
             }
-        }).run();
-        console.log(api);
+        }).request();
     }
 }
 
