@@ -782,7 +782,7 @@ class StatusLabel {
      * 失败
      */
     static readonly Failed = new LogLabel(
-        "×", new LogStyle().setBlank("0 4px").setBorder("1000px", "1px solid red").setColor("red")
+        "x", new LogStyle().setBlank("0 4px").setBorder("1000px", "1px solid red").setColor("red")
     );
 }
 

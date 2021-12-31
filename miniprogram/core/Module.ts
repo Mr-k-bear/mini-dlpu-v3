@@ -1,4 +1,4 @@
-import { EventEmitter, EventType } from "./EventEmitter";
+import { Emitter, EventType } from "./Emitter";
 import { Logger, LogLabel, LogStyle, LevelLogLabel } from "./Logger";
 
 /**
@@ -62,7 +62,7 @@ class Modular<
     DEP extends Depends<M> = Depends<M>,
     E   extends Record<EventType, unknown> = Record<EventType, unknown>,
     TD  extends IAnyTypeObject = IAnyTypeObject>
-extends EventEmitter<E>
+extends Emitter<E>
 implements WXContext<TD, IAnyTypeObject> {
 
     // [x:string]: any;

@@ -1,4 +1,4 @@
-import { EventEmitter } from "./EventEmitter";
+import { Emitter } from "./Emitter";
 import { Logger, LogLabel, LevelLogLabel, colorRadio, StatusLabel } from "./Logger";
 interface IAppAPIParam {
     api: {
@@ -118,7 +118,7 @@ type IAPIEvent<I extends IAnyData, O extends IAnyData> = {
 /**
  * 接口调用
  */
-class API<I extends IAnyData, O extends IAnyData> extends EventEmitter<IAPIEvent<I, O>> {
+class API<I extends IAnyData, O extends IAnyData> extends Emitter<IAPIEvent<I, O>> {
 
     /**
      * 基础 URL
