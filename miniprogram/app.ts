@@ -1,8 +1,9 @@
 import { IAppAPIParam } from "./core/Api";
+import { IAppStorageParam, Storage, IStorageData } from "./core/Storage";
 import { Logger, LevelLogLabel, LifeCycleLogLabel } from "./core/Logger";
 
 
-App<IAppAPIParam>({
+App<IAppAPIParam & IAppStorageParam>({
 
     /**
      * API 模块需要的全局数据
@@ -16,7 +17,7 @@ App<IAppAPIParam>({
     /**
      * 存储缓存键值
      */
-    // storageCache: new Set<string>(),
+    storage: new Map<string, Storage<IStorageData>>(),
 
     /**
      * 小程序加载时
