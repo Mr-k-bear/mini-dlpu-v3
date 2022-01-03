@@ -8,7 +8,7 @@ import { Storage } from "../../core/Storage";
 class TestCore<M extends Manager> extends Modular<M> 
 implements Partial<ILifetime> {
 
-    public onLoad() {
+    public override onLoad() {
         
         let s = new Storage("test", {
             a: new Date(),
