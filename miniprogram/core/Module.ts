@@ -1,5 +1,5 @@
-import { Emitter, EventType } from "./Emitter";
-import { Logger, LogLabel, LogStyle, LevelLogLabel } from "./Logger";
+import { Emitter } from "./Emitter";
+import { Logger, LogLabel, colorRadio, LevelLogLabel } from "./Logger";
 
 /**
  * 自定义对象类型
@@ -51,6 +51,149 @@ type Depends<M extends Manager<AnyWXContext>> = {
 };
 
 /**
+ * 微信继承的函数
+ */
+class WXInstanceMethods<
+    E extends IAnyTypeObject = IAnyTypeObject,
+    W extends AnyWXContext = AnyWXContext
+> 
+extends Emitter<E>
+implements InstanceMethods<W["data"]> {
+
+    public superContext: W;
+
+    public constructor(context: W) {
+        super();
+        this.superContext = context;
+    }
+
+    public setData(data: Partial<W["data"]> & WechatMiniprogram.IAnyObject, callback?: () => void): void {
+        return this.superContext.setData(data, callback);
+    }
+
+    public hasBehavior(behavior: string): void {
+        return this.superContext.hasBehavior(behavior);
+    }
+
+    public triggerEvent<DetailType = any>(name: string, detail?: DetailType, options?: WechatMiniprogram.Component.TriggerEventOption): void {
+        return this.superContext.triggerEvent(name, detail, options)
+    }
+
+    public createSelectorQuery(): WechatMiniprogram.SelectorQuery {
+        return this.superContext.createSelectorQuery();
+    }
+    
+    public createIntersectionObserver(options: WechatMiniprogram.CreateIntersectionObserverOption): WechatMiniprogram.IntersectionObserver {
+        return this.superContext.createIntersectionObserver(options);
+    }
+
+    public selectComponent(selector: string): WechatMiniprogram.Component.TrivialInstance {
+        return this.superContext.selectComponent(selector);
+    }
+
+    public selectAllComponents(selector: string): WechatMiniprogram.Component.TrivialInstance[] {
+        return this.superContext.selectAllComponents(selector);
+    }
+
+    public selectOwnerComponent(): WechatMiniprogram.Component.TrivialInstance {
+        return this.superContext.selectOwnerComponent();
+    }
+
+    public getRelationNodes(relationKey: string): WechatMiniprogram.Component.TrivialInstance[] {
+        return this.superContext.getRelationNodes(relationKey);
+    }
+
+    public groupSetData(callback?: () => void): void {
+        return this.superContext.groupSetData(callback);
+    }
+
+    public getTabBar(): WechatMiniprogram.Component.TrivialInstance {
+        return this.superContext.getTabBar();
+    }
+
+    public getPageId(): string {
+        return this.superContext.getPageId();
+    }
+
+    public animate(selector: string, keyFrames: WechatMiniprogram.Component.KeyFrame[], duration: number, callback?: () => void): void;
+    public animate(selector: string, keyFrames: WechatMiniprogram.Component.ScrollTimelineKeyframe[], duration: number, 
+        scrollTimeline: WechatMiniprogram.Component.ScrollTimelineOption): void;
+    public animate(selector: any, keyFrames: any, duration: any, scrollTimeline?: any): void {
+        return this.superContext.animate(selector, keyFrames, duration, scrollTimeline);
+    }
+
+    public clearAnimation(selector: string, callback: () => void): void;
+    public clearAnimation(selector: string, options?: WechatMiniprogram.Component.ClearAnimationOptions, callback?: () => void): void;
+    public clearAnimation(selector: any, options?: any, callback?: any): void {
+        return this.superContext.clearAnimation(selector, options, callback);
+    }
+
+    public getOpenerEventChannel(): WechatMiniprogram.EventChannel {
+        return this.superContext.getOpenerEventChannel();
+    }
+}
+
+/**
+ * 微信继承的属性
+ */
+class WXInstanceProperties<
+    E extends IAnyTypeObject = IAnyTypeObject,
+    W extends AnyWXContext = AnyWXContext
+>
+extends WXInstanceMethods<E, W>
+implements InstanceProperties {
+
+    public override superContext: W;
+
+    constructor(context: W) {
+        super(context);
+        this.superContext = context;
+    }
+
+    public get is(): string { return this.superContext.is };
+
+    public get route(): string { return this.superContext.route };
+
+    public get options(): Record<string, string | undefined> { return this.superContext.options };
+}
+
+class WXILifetime<
+    E extends IAnyTypeObject = IAnyTypeObject,
+    W extends AnyWXContext = AnyWXContext
+>
+extends WXInstanceProperties<E, W>
+implements ILifetime {
+
+    public onLoad(query: Record<string, string | undefined>): void | Promise<void> {};
+
+    public onShow(): void | Promise<void> {};
+
+    public onReady(): void | Promise<void> {};
+
+    public onHide(): void | Promise<void> {};
+
+    public onUnload(): void | Promise<void> {};
+
+    public onPullDownRefresh(): void | Promise<void> {};
+
+    public onReachBottom(): void | Promise<void> {};
+
+    public onShareAppMessage(options: WechatMiniprogram.Page.IShareAppMessageOption): void | WechatMiniprogram.Page.ICustomShareContent {};
+
+    public onShareTimeline(): void | WechatMiniprogram.Page.ICustomTimelineContent {};
+
+    public onPageScroll(options: WechatMiniprogram.Page.IPageScrollOption): void | Promise<void> {};
+
+    public onTabItemTap(options: WechatMiniprogram.Page.ITabItemTapOption): void | Promise<void> {};
+
+    public onResize(options: WechatMiniprogram.Page.IResizeOption): void | Promise<void> {};
+    
+    public onAddToFavorites(options: WechatMiniprogram.Page.IAddToFavoritesOption): WechatMiniprogram.Page.IAddToFavoritesContent {
+        return {};
+    };
+}
+
+/**
  * 页面模组
  * @template M 所属 Manager
  * @template DEP 模组依赖
@@ -60,9 +203,10 @@ type Depends<M extends Manager<AnyWXContext>> = {
 class Modular<
     M   extends Manager<AnyWXContext> = Manager<AnyWXContext>,
     DEP extends Depends<M> = Depends<M>,
-    E   extends Record<EventType, unknown> = Record<EventType, unknown>,
-    TD  extends IAnyTypeObject = IAnyTypeObject>
-extends Emitter<E>
+    E   extends IAnyTypeObject = IAnyTypeObject,
+    TD  extends IAnyTypeObject = IAnyTypeObject
+>
+extends WXILifetime<E, M["context"]>
 implements WXContext<TD, IAnyTypeObject> {
 
     // [x:string]: any;
@@ -95,7 +239,7 @@ implements WXContext<TD, IAnyTypeObject> {
     public functionList:Set<string>;
 
     /**
-     * 函数使用的参数列表
+     * 模组使用的参数列表
      */
     public paramList:Set<string>;
 
@@ -103,13 +247,6 @@ implements WXContext<TD, IAnyTypeObject> {
      * 命名空间
      */
     public nameSpace:string;
-
-    // 映射主上下文属性
-    public get is():string { return this.context.is };
-    public get route():string { return this.context.route };
-    public get options():Record<string, string | undefined> {
-        return this.context.options;
-    };
     
     /**
      * 一旦被类被构造，整个页面的全部申明周期将
@@ -120,7 +257,7 @@ implements WXContext<TD, IAnyTypeObject> {
      */
     public constructor(manager:M, nameSpace:string, depend?: DEP) {
 
-        super();
+        super(manager.context);
 
         // 保存微信上下文
         this.manager = manager;
@@ -134,7 +271,7 @@ implements WXContext<TD, IAnyTypeObject> {
         this.nameSpace = nameSpace;
     }
 
-    public setData(data:Partial<TD>, callback?: () => void):void {
+    public override setData(data:Partial<TD>, callback?: () => void):void {
 
         if(this.data === void 0) {
             this.data = {} as TD;
@@ -162,76 +299,6 @@ implements WXContext<TD, IAnyTypeObject> {
         (this.context as IAnyTypeObject)
         [`${ this.nameSpace }$${ name }`] = fn.bind(this);
     }
-
-    //#region 映射微信的继承函数
-
-    public hasBehavior(behavior: string): void {
-        return this.context.hasBehavior(behavior);
-    }
-    
-    public triggerEvent<DetailType>(name: string, detail?: DetailType, 
-        options?: WechatMiniprogram.Component.TriggerEventOption): void {
-        return this.context.triggerEvent<DetailType>(name, detail, options);
-    }
-
-    public createSelectorQuery(): WechatMiniprogram.SelectorQuery {
-        return this.context.createSelectorQuery();
-    }
-
-    public createIntersectionObserver(options: WechatMiniprogram.CreateIntersectionObserverOption): 
-        WechatMiniprogram.IntersectionObserver {
-        return this.context.createIntersectionObserver(options);
-    }
-
-    public selectComponent(selector: string): WechatMiniprogram.Component.TrivialInstance {
-        return this.context.selectComponent(selector);
-    }
-
-    public selectAllComponents(selector: string): WechatMiniprogram.Component.TrivialInstance[] {
-        return this.context.selectAllComponents(selector);
-    }
-
-    public selectOwnerComponent(): WechatMiniprogram.Component.TrivialInstance {
-        return this.context.selectOwnerComponent();
-    }
-
-    public getRelationNodes(relationKey: string): WechatMiniprogram.Component.TrivialInstance[] {
-        return this.context.getRelationNodes(relationKey);
-    }
-
-    public groupSetData(callback?: () => void): void {
-        return this.context.groupSetData(callback);
-    }
-
-    public getTabBar(): WechatMiniprogram.Component.TrivialInstance {
-        return this.context.getTabBar();
-    }
-
-    public getPageId(): string {
-        return this.context.getPageId();
-    }
-
-    public animate(selector: string, keyFrames: WechatMiniprogram.Component.KeyFrame[], 
-        duration: number, callback?: () => void): void;
-    public animate(selector: string, keyFrames: WechatMiniprogram.Component.ScrollTimelineKeyframe[], 
-        duration: number, scrollTimeline: WechatMiniprogram.Component.ScrollTimelineOption): void;
-    public animate(selector: any, keyFrames: any, duration: any, scrollTimeline?: any): void {
-        return this.context.animate(selector, keyFrames, duration, scrollTimeline);
-    }
-    
-    public clearAnimation(selector: string, callback: () => void): void;
-    public clearAnimation(selector: string, options?: WechatMiniprogram.Component.ClearAnimationOptions,
-            callback?: () => void): void;
-    public clearAnimation(selector: any, options?: any, callback?: any): void {
-        return this.context.clearAnimation(selector, options, callback);
-    }
-
-    public getOpenerEventChannel(): WechatMiniprogram.EventChannel {
-        return this.context.getOpenerEventChannel();
-    }
-
-    //#endregion
-
 }
 
 /**
@@ -244,19 +311,9 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
      * 微信生命周期
      */
     static readonly WxLifeCycle:(keyof ILifetime)[] = [
-        "onShow", 
-        "onReady", 
-        "onHide", 
-        "onUnload", 
-        "onPullDownRefresh",
-        "onReachBottom", 
-        "onShareAppMessage", 
-        "onShareTimeline",
-        "onAddToFavorites",
-        "onPageScroll", 
-        "onResize", 
-        "onTabItemTap"
-    ]
+        "onShow", "onReady", "onHide", "onUnload", "onPullDownRefresh", "onReachBottom", 
+        "onShareAppMessage", "onShareTimeline","onAddToFavorites","onPageScroll", "onResize", "onTabItemTap"
+    ];
 
     /**
      * 保存页面上下文
@@ -288,9 +345,10 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
      * @param depend 模块依赖
      * @returns 模块实例
      */
-    public addModule<DEP extends Depends<this>, M extends Modular<this, DEP>>
-    (mode: new (manager:Manager<WXC>, nameSpace:string, depend?:DEP) => M, 
-    nameSpace:string, depend?:DEP):M {
+    public addModule<DEP extends Depends<this>, M extends Modular<this, DEP>> (
+        mode: new (manager:this, nameSpace:string, depend?:DEP) => M, 
+        nameSpace:string, depend?:DEP
+    ):M {
         let mod = new mode(this, nameSpace, depend);
         this.modules.push(mod);
         return mod;
@@ -300,14 +358,14 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
      * 创建指定生命周期的钩子
      * @param key 生命周期键值
      */
-    public creatHooks(key:keyof ILifetime):(...arg: any[]) => Promise<any> {
-        return async (...arg: any[]) => {
+    public creatHooks<Key extends keyof ILifetime>(key: Key): ILifetime[Key] {
+        let hook = (async (...arg: any[]) => {
 
             let hooks:Promise<any>[] = [];
 
             for(let i = 0; i < this.modules.length; i++) {
 
-                let fn:Function = (this.modules[i] as IAnyTypeObject)[key];
+                let fn:Function = this.modules[i][key];
 
                 if(fn === void 0) continue;
                 let res: Promise<any> | any = fn.apply(this.modules[i], arg);
@@ -340,7 +398,10 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
             }
 
             return Promise.all(hooks);
-        }
+        });
+
+        // TODO: 此处为，关键位置，容易出错，请再次检查
+        return (hook as any);
     }
 
     /**
@@ -383,7 +444,7 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
         this.context.setData(this.context.data);
 
         // 调用全部模块的 onLoad 周期
-        let res = this.creatHooks("onLoad")(query as any); 
+        let res = this.creatHooks("onLoad")(query); 
 
         // 打印每个模块的键值对使用情况
         for(let i = 0; i < this.modules.length; i++) {
@@ -411,9 +472,9 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
     /**
      * 模块被添加时的标签
      */
-    public static readonly AddModuleLabel = new LogLabel("addModule", 
-        new LogStyle().setBorder("4px", `1px solid #8600FF`)
-        .setColor("#FF00FF", "rgba(54, 0, 255, .2)").setBlank("0 5px")
+    public static readonly AddModuleLabel = new LogLabel(
+        "addModule", 
+        colorRadio(54, 0, 255)
     )
 
     /**

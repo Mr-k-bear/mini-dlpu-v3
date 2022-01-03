@@ -1,5 +1,13 @@
 import { Logger, LogLabel, LevelLogLabel, colorRadio } from "./Logger";
 
+interface IAppStorageParam {
+
+    /**
+     * storage 缓存
+     */
+    storage: Map<string, Storage<IStorageData>>
+}
+
 /**
  * 状态
  */
@@ -81,7 +89,8 @@ type IStorageData = {
  * 1. 该类封装了 wxStorage 操作
  * 2. 全异步获取无阻塞
  * 3. 使用数据缓缓冲区，优化高频存取
- * 4. 
+ * 4. 如果全局范围内已存在莫键值 storage 的实例
+ * 则此实例将链接到已存在实例
  */
 class Storage<T extends IStorageData> {
 
@@ -103,7 +112,22 @@ class Storage<T extends IStorageData> {
     /**
      * 缓存数据
      */
-    private cache:T;
+    private _cache: T = {} as T;
+    private set cache(data: T) {
+        if (this.cacheStorage) {
+            for (const key in data) {
+                this.cacheStorage.cache[key] = data[key];
+            }
+        } else {
+            for (const key in data) {
+                this._cache[key] = data[key];
+            }
+        }
+    }
+    private get cache():T {
+        if (this.cacheStorage) return this.cacheStorage.cache;
+        else return this._cache;
+    }
 
     /**
      * cache 到 storage 等待列表
@@ -111,9 +135,17 @@ class Storage<T extends IStorageData> {
     private saveWaiter:Waiter = new Waiter();
 
     /**
+     * 缓存对象
+     */
+    private cacheStorage:Storage<T> | undefined;
+
+    /**
      * 将数据从 cache 同步到 storage
      */
     public async save():Promise<void> {
+
+        // 如果存在链接的实例
+        if (this.cacheStorage) return this.cacheStorage.save();
 
         // 如果没有开始存储
         // 发起一次异步读取
@@ -151,6 +183,24 @@ class Storage<T extends IStorageData> {
     }
 
     /**
+     * 在缓存中搜索此键值的实例
+     */
+    private findStorageCache(): boolean {
+        let { storage: storageMap } = getApp<IAppStorageParam>();
+
+        // 查找缓存
+        let storage = storageMap.get(this.key);
+        if (storage) {
+            this.cacheStorage = storage as Storage<T>;
+            return true;
+        };
+
+        // 缓存此实例
+        storageMap.set(this.key, this);
+        return false;
+    }
+
+    /**
      * 重置全部数据
      */
     public async reset() {
@@ -164,12 +214,24 @@ class Storage<T extends IStorageData> {
     /**
      * @param defaultData 键值默认数据
      */
-    public constructor(key:string, defaultData:T) {
+    public constructor(key:string, defaultData?:T) {
         this.key = key;
-        this.defaultData = defaultData;
+        this.defaultData = defaultData ?? {} as T;
         this.StorageLogLabel = new LogLabel(
             `Storage:${ this.key }`, colorRadio(34, 230, 258)
         );
+
+        // 如果已找到其他实力，将此实例链接到目标实例
+        if (this.findStorageCache()) {
+
+            // 设置默认值
+            for (const key in this.defaultData) {
+                if (this.cache[key] === void 0) {
+                    this.set(key, this.defaultData[key]);
+                }
+            }
+            return;
+        };
 
         // 读取数据到缓存
         this.cache = wx.getStorageSync<T>(this.key);
@@ -205,4 +267,4 @@ class Storage<T extends IStorageData> {
 }
 
 export default Storage;
-export { Storage, StorageState, Waiter };
+export { Storage, StorageState, Waiter, IAppStorageParam, IStorageData };

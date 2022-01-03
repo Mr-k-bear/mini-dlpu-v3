@@ -4,7 +4,7 @@ import { Logger, LogLabel, LevelLogLabel, LifeCycleLogLabel, NormalStyle } from 
 /**
  * 在 UI 中显示的数据
  */
-type DisplayData = {
+interface IDisplayData {
 
     /**
      * 显示内容
@@ -20,8 +20,8 @@ type DisplayData = {
 /**
  * 模组事件
  */
-type StatusBarEvent = {
-    m: DisplayData
+interface StatusBarEvent {
+    m: IDisplayData
 };
 
 /**

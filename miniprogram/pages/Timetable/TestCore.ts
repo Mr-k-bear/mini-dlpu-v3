@@ -8,12 +8,21 @@ import { Storage } from "../../core/Storage";
 class TestCore<M extends Manager> extends Modular<M> 
 implements Partial<ILifetime> {
 
-    public onLoad() {
+    public override onLoad() {
         
         let s = new Storage("test", {
             a: new Date(),
             be: 2
         });
+
+        let s2 = new Storage("test", {
+            be: 1,
+            aa: "abc"
+        });
+
+        s2.set("be", 4);
+
+        console.log(s, s2);
 
         setTimeout(() => {
             s.set("be", 12);
@@ -55,9 +64,7 @@ implements Partial<ILifetime> {
             }
         }).request().wait({
             success: (d) => console.log(d)
-        }).wait({
-            success: (d) => console.log(d)
-        });
+        })
     }
 }
 
