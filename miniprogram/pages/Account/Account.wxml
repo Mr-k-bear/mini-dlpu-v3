@@ -1,8 +1,22 @@
+
+<!-- 顶部的阴影 -->
+<view class="top-shadow"></view>
+
+<!-- 页面容器 -->
 <view class="container">
 
     <!-- 用户卡片 -->
-    <view class="user-card">
-        
+    <view class="user-card card">
+        <view class="avatar">
+            <open-data type="userAvatarUrl" />
+        </view>
+        <view class="info">
+            <view class="nick">
+                <open-data type="userNickName" />
+            </view>
+            <view class="student">秦浩轩</view>
+            <view class="student">1806240113</view>
+        </view>
     </view>
 
 </view>
