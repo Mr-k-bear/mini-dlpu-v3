@@ -9,7 +9,7 @@ view.status-bar {
     display: flex;
     position: fixed;
     justify-content: space-between;
-    background-color: #F8F8F8;
+    background-color: $theme-color-light-layout;
 
     view.select {
         flex: 1;
@@ -111,7 +111,7 @@ view.status-bar-blank {
     }
 
     view.status-bar {
-        background-color: #191919;
+        background-color: $theme-color-dark-layout;
       
         view.select image {
             filter: $white-filter;

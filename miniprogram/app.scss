@@ -7,8 +7,8 @@ $theme-color-light-background: #f4f0f1;
 $theme-color-light-title: rgba(0, 0, 0, .65);
 $theme-color-light-text: rgba(0, 0, 0, .55);
 
-$theme-color-dark-layout: #191919;
-$theme-color-dark-background: #1f1f1f;
+$theme-color-dark-layout: #1f1f1f;
+$theme-color-dark-background: #181615;
 $theme-color-dark-title: rgba(255, 255, 255, .65);
 $theme-color-dark-text: rgba(255, 255, 255, .55);
 
@@ -16,10 +16,13 @@ $black-filter: brightness(0) opacity(.65);
 $white-filter: brightness(100) opacity(.65);
 $blue-filter: opacity(.65);
 
-
+view.container {
+    width: 88%;
+    padding: 0 6%;
+}
 
 page {
-    background-color: #f4f0f1;
+    background-color: $theme-color-light-background;
     color: $theme-color-light-text;
     font-weight: 500;
     font-size: .9em;
@@ -28,7 +31,7 @@ page {
   
 @media (prefers-color-scheme: dark){
     page {
-      background-color: #1f1f1f;
+      background-color: $theme-color-dark-background;
       color: $theme-color-dark-text;
     }
 }

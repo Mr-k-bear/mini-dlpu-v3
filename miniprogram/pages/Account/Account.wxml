@@ -1,1 +1,8 @@
-<!-- <text>pages/Account/Account.wxml</text> -->
+<view class="container">
+
+    <!-- 用户卡片 -->
+    <view class="user-card">
+        
+    </view>
+
+</view>

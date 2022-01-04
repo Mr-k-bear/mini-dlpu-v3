@@ -11,9 +11,9 @@
   },
 
   "dark": {
-    "navigationBarBackgroundColor": "#191919",
+    "navigationBarBackgroundColor": "#1f1f1f",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#1f1f1f",
+    "backgroundColor": "#191919",
 
     "tabBarColor": "#666666",
     "tabBarImage0": "image/navBar/0_dark.png",
