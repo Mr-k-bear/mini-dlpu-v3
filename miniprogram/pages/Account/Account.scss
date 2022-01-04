@@ -22,8 +22,18 @@ view.container {
             padding-left: 20px;
             
             view.nick {
-                color: $theme-color-light-title;
+                margin: 4px 0;
+            }
+
+            view.student {
+                margin: 1px 0;
             }
         }
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    view.container view.user-card view.avatar{
+        filter: brightness(.8);
     }
 }

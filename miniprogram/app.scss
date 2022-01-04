@@ -5,12 +5,12 @@ $theme-color-red: #FF9393;
 $theme-color-light-layout: #F8F8F8;
 $theme-color-light-background: #f4f0f1;
 $theme-color-light-title: rgba(0, 0, 0, .65);
-$theme-color-light-text: rgba(0, 0, 0, .55);
+$theme-color-light-text: rgba(0, 0, 0, .5);
 
 $theme-color-dark-layout: #1f1f1f;
 $theme-color-dark-background: #181615;
 $theme-color-dark-title: rgba(255, 255, 255, .65);
-$theme-color-dark-text: rgba(255, 255, 255, .55);
+$theme-color-dark-text: rgba(255, 255, 255, .5);
 
 $black-filter: brightness(0) opacity(.65);
 $white-filter: brightness(100) opacity(.65);
@@ -42,18 +42,31 @@ view.top-shadow {
     box-shadow: 0 1.6px 3.6px 0 rgba(0, 0, 0, .05);
 }
 
-view.text {
-    
-}
-
 page {
     background-color: $theme-color-light-background;
     color: $theme-color-light-text;
-    font-weight: 500;
-    font-size: .9em;
+}
+
+view, text {
+    font-size: .99em;
     font-family: Hiragino Sans GB, MicroSoft YaHei;
 }
-  
+
+view.h1 {
+    color: $theme-color-light-title;
+    font-size: 1.5em;
+}
+
+view.h2 {
+    color: $theme-color-light-title;
+    font-size: 1.3em;
+}
+
+view.h3 {
+    color: $theme-color-light-title;
+    font-size: 1em;
+}
+ 
 @media (prefers-color-scheme: dark){
     page {
         background-color: $theme-color-dark-background;
@@ -62,5 +75,20 @@ page {
 
     view.card {
         background-color: $theme-color-dark-layout;
+    }
+
+    view.h1 {
+        color: $theme-color-dark-title;
+        font-size: 1.2em;
+    }
+
+    view.h2 {
+        color: $theme-color-dark-title;
+        font-size: 1.3em;
+    }
+    
+    view.h3 {
+        color: $theme-color-dark-title;
+        font-size: 1em;
     }
 }

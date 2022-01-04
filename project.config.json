@@ -1,58 +1,58 @@
 {
-  "description": "项目配置文件",
-  "packOptions": {
-    "ignore": []
-  },
-  "miniprogramRoot": "miniprogram/",
-  "compileType": "miniprogram",
-  "libVersion": "2.16.1",
-  "projectname": "mini-dlpu-v3",
-  "setting": {
-    "urlCheck": false,
-    "es6": true,
-    "enhance": true,
-    "postcss": true,
-    "preloadBackgroundData": false,
-    "minified": true,
-    "newFeature": false,
-    "coverView": true,
-    "nodeModules": false,
-    "autoAudits": false,
-    "showShadowRootInWxmlPanel": true,
-    "scopeDataCheck": false,
-    "uglifyFileName": true,
-    "checkInvalidKey": true,
-    "checkSiteMap": true,
-    "uploadWithSourceMap": true,
-    "compileHotReLoad": false,
-    "lazyloadPlaceholderEnable": false,
-    "useMultiFrameRuntime": true,
-    "useApiHook": true,
-    "useApiHostProcess": true,
-    "babelSetting": {
-      "ignore": [],
-      "disablePlugins": [],
-      "outputPath": ""
+    "description": "项目配置文件",
+    "packOptions": {
+        "ignore": []
     },
-    "enableEngineNative": false,
-    "useIsolateContext": false,
-    "userConfirmedBundleSwitch": false,
-    "packNpmManually": false,
-    "packNpmRelationList": [],
-    "minifyWXSS": true,
-    "disableUseStrict": false,
-    "minifyWXML": true,
-    "showES6CompileOption": false,
-    "useCompilerPlugins": [
-      "typescript",
-      "sass"
-    ]
-  },
-  "simulatorType": "wechat",
-  "simulatorPluginLibVersion": {},
-  "appid": "wx7d809f5e8955843d",
-  "scripts": {
-    "beforeCompile": ""
-  },
-  "condition": {}
+    "miniprogramRoot": "miniprogram/",
+    "compileType": "miniprogram",
+    "libVersion": "2.16.1",
+    "projectname": "mini-dlpu-v3",
+    "setting": {
+        "urlCheck": false,
+        "es6": true,
+        "enhance": true,
+        "postcss": true,
+        "preloadBackgroundData": false,
+        "minified": true,
+        "newFeature": false,
+        "coverView": true,
+        "nodeModules": false,
+        "autoAudits": false,
+        "showShadowRootInWxmlPanel": true,
+        "scopeDataCheck": false,
+        "uglifyFileName": true,
+        "checkInvalidKey": true,
+        "checkSiteMap": true,
+        "uploadWithSourceMap": true,
+        "compileHotReLoad": false,
+        "lazyloadPlaceholderEnable": false,
+        "useMultiFrameRuntime": false,
+        "useApiHook": false,
+        "useApiHostProcess": false,
+        "babelSetting": {
+            "ignore": [],
+            "disablePlugins": [],
+            "outputPath": ""
+        },
+        "enableEngineNative": false,
+        "useIsolateContext": false,
+        "userConfirmedBundleSwitch": false,
+        "packNpmManually": false,
+        "packNpmRelationList": [],
+        "minifyWXSS": true,
+        "disableUseStrict": false,
+        "minifyWXML": true,
+        "showES6CompileOption": false,
+        "useCompilerPlugins": [
+            "typescript",
+            "sass"
+        ]
+    },
+    "simulatorType": "wechat",
+    "simulatorPluginLibVersion": {},
+    "appid": "wx7d809f5e8955843d",
+    "scripts": {
+        "beforeCompile": ""
+    },
+    "condition": {}
 }

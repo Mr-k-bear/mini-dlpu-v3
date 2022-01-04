@@ -11,7 +11,7 @@
             <open-data type="userAvatarUrl" />
         </view>
         <view class="info">
-            <view class="nick">
+            <view class="nick h1">
                 <open-data type="userNickName" />
             </view>
             <view class="student">秦浩轩</view>
