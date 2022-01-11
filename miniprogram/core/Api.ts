@@ -1,4 +1,5 @@
 import { Emitter } from "./Emitter";
+import { API_FAILED_SHOW_MESSAGE } from "./Config";
 import { Logger, LogLabel, LevelLogLabel, colorRadio, StatusLabel } from "./Logger";
 interface IAppAPIParam {
     api: {
@@ -491,6 +492,65 @@ class API<I extends IAnyData, O extends IAnyData> extends Emitter<IAPIEvent<I, O
             });
         }
     }
+
+    /**
+     * 请求加载时显示加载动画
+     * @param message 消息 可以为函数
+     * @param mask 使用蒙版阻止点击穿透
+     */
+    public showLoading(message: string | ((data?: Partial<I>) => string), mask: boolean = false): this {
+
+        // 获取标题
+        let title: string = message instanceof Function ? message(this.data) : message;
+        
+        this.on("request", () => {
+            wx.showLoading({
+                title, mask
+            })
+        });
+
+        this.on("complete", () => {
+            wx.hideLoading();
+        });
+
+        return this;
+    };
+
+    /**
+     * 显示导航栏加载动画
+     */
+    public showNavigationBarLoading(): this {
+
+        this.on("request", () => {
+            wx.showNavigationBarLoading()
+        });
+
+        this.on("complete", () => {
+            wx.hideNavigationBarLoading();
+        });
+
+        return this;
+    }
+
+    /**
+     * 请求失败后的提示语句
+     */
+    public showFailed(): this {
+
+        // 生成随机索引值
+        let randomIndex = Math.floor( 
+            Math.random() * API_FAILED_SHOW_MESSAGE.length
+        );
+
+        this.on("fail", () => {
+            wx.showToast({
+                title: API_FAILED_SHOW_MESSAGE[randomIndex], 
+                icon: "none"
+            });
+        });
+
+        return this;
+    };
 }
 
 /**
