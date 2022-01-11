@@ -5,30 +5,90 @@ $theme-color-red: #FF9393;
 $theme-color-light-layout: #F8F8F8;
 $theme-color-light-background: #f4f0f1;
 $theme-color-light-title: rgba(0, 0, 0, .65);
-$theme-color-light-text: rgba(0, 0, 0, .55);
+$theme-color-light-text: rgba(0, 0, 0, .5);
 
-$theme-color-dark-layout: #191919;
-$theme-color-dark-background: #1f1f1f;
+$theme-color-dark-layout: #1f1f1f;
+$theme-color-dark-background: #181615;
 $theme-color-dark-title: rgba(255, 255, 255, .65);
-$theme-color-dark-text: rgba(255, 255, 255, .55);
+$theme-color-dark-text: rgba(255, 255, 255, .5);
 
 $black-filter: brightness(0) opacity(.65);
 $white-filter: brightness(100) opacity(.65);
 $blue-filter: opacity(.65);
 
+// 页面容器外边距
+view.container {
+    width: 88%;
+    padding: 0 6%;
+}
 
+// 带阴影的 card
+view.card {
+    width: calc( 100% - 36px );
+    padding: 0 18px;
+    border-radius: 15px;
+    background-color: $theme-color-light-layout;
+    box-shadow: 0 1.6px 3.6px 0 rgba(0, 0, 0, .08), 
+                0 0.3px 0.9px 0 rgba(0, 0, 0, .05);
+}
+
+// 顶部导航栏阴影
+view.top-shadow {
+    position: fixed;
+    z-index: 9999;
+    width: 100%;
+    height: 10px;
+    top: -10px;
+    box-shadow: 0 1.6px 3.6px 0 rgba(0, 0, 0, .05);
+}
 
 page {
-    background-color: #f4f0f1;
+    background-color: $theme-color-light-background;
     color: $theme-color-light-text;
-    font-weight: 500;
-    font-size: .9em;
+}
+
+view, text {
+    font-size: .99em;
     font-family: Hiragino Sans GB, MicroSoft YaHei;
 }
-  
+
+view.h1 {
+    color: $theme-color-light-title;
+    font-size: 1.5em;
+}
+
+view.h2 {
+    color: $theme-color-light-title;
+    font-size: 1.3em;
+}
+
+view.h3 {
+    color: $theme-color-light-title;
+    font-size: 1em;
+}
+ 
 @media (prefers-color-scheme: dark){
     page {
-      background-color: #1f1f1f;
-      color: $theme-color-dark-text;
+        background-color: $theme-color-dark-background;
+        color: $theme-color-dark-text;
+    }
+
+    view.card {
+        background-color: $theme-color-dark-layout;
+    }
+
+    view.h1 {
+        color: $theme-color-dark-title;
+        font-size: 1.2em;
+    }
+
+    view.h2 {
+        color: $theme-color-dark-title;
+        font-size: 1.3em;
+    }
+    
+    view.h3 {
+        color: $theme-color-dark-title;
+        font-size: 1em;
     }
 }
