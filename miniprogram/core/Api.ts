@@ -1,4 +1,5 @@
-import { Emitter } from "./Emitter";
+import { Emitter, EventType } from "./Emitter";
+import { API_FAILED_SHOW_MESSAGE } from "./Config";
 import { Logger, LogLabel, LevelLogLabel, colorRadio, StatusLabel } from "./Logger";
 interface IAppAPIParam {
     api: {
@@ -116,16 +117,57 @@ type IAPIEvent<I extends IAnyData, O extends IAnyData> = {
 }
 
 /**
- * 接口调用
+ * 输出事件类型
  */
-class API<I extends IAnyData, O extends IAnyData> extends Emitter<IAPIEvent<I, O>> {
+type IAPIResultEvent<O extends IAnyData, U extends IAnyData> = {
+
+    /**
+     * 成功获取数据
+     */
+    ok: O,
+
+    /**
+     * 无论因为什么
+     * 总之数据获取到
+     */
+    no: { message: string } & U,
+
+    /**
+     * 完成了
+     * 无论失败与否
+     */
+    done: { message: string, data: O } & U
+}
+
+/**
+ * API 接口调用
+ * @template I API 输入数据
+ * @template O API 输出数据
+ * @template E API 中的事件
+ * @template U 用户自定义的输出数据
+ */
+class API<
+    I extends IAnyData = IAnyData, 
+    O extends IAnyData = IAnyData,
+    E extends Record<EventType, any> = Record<EventType, any>,
+    U extends IAnyData = IAnyData
+> extends Emitter <
+    {
+        // 这个复杂的泛型是为了 MixIn 用户自定义事件类型
+        // 懂得如何使用就可以了
+        // 不要试图去理解下面这三行代码，真正的恶魔在等着你
+        [P in (keyof (IAPIEvent<I, O> & IAPIResultEvent<O, U>) | keyof E)] : 
+        P extends keyof IAPIEvent<I, O> ? IAPIEvent<I, O>[P] : 
+        P extends keyof IAPIResultEvent<O, U> ? IAPIResultEvent<O, U>[P] : E[P]
+    }
+> {
 
     /**
      * 基础 URL
      * TODO: 这里可能涉及负载均衡
      */
     public static get baseUrl():string {
-        return "https://blog.mrkbear.com";
+        return "https://jwc.nogg.cn";
     }
 
     public static defaultLogLabel:LogLabel = new LogLabel(
@@ -366,7 +408,7 @@ class API<I extends IAnyData, O extends IAnyData> extends Emitter<IAPIEvent<I, O
 
         // 判断 API 是否相似
         app.api.pool.forEach((api) => {
-            if (api === this) return;
+            if ((api as API | this) === this) return;
             if (!api.requestData) return;
             if (api.requestData!.url !== this.requestData!.url) return;
             if (api.requestData!.method !== this.requestData!.method) return;
@@ -471,9 +513,9 @@ class API<I extends IAnyData, O extends IAnyData> extends Emitter<IAPIEvent<I, O
     /**
      * 等待结果
      */
-    public wait(): Promise<IRespondData<O>>;
-    public wait(callBack?: ICallBack<O>): this;
-    public wait(callBack?: ICallBack<O>): Promise<IRespondData<O>> | this {
+    public waitRequest(): Promise<IRespondData<O>>;
+    public waitRequest(callBack: ICallBack<O>): this;
+    public waitRequest(callBack?: ICallBack<O>): Promise<IRespondData<O>> | this {
         
         // 存在 callback 使用传统回调
         if (callBack) {
@@ -491,6 +533,85 @@ class API<I extends IAnyData, O extends IAnyData> extends Emitter<IAPIEvent<I, O
             });
         }
     }
+
+    public wait(): Promise<IAPIResultEvent<O, U>["done"]>;
+    public wait(callBack: IResCallBack<O, U>): this;
+    public wait(callBack?: IResCallBack<O, U>): Promise<IAPIResultEvent<O, U>["done"]> | this {
+
+        // 存在 callback 使用传统回调
+        if (callBack) {
+            callBack.ok && this.on("ok", callBack.ok);
+            callBack.no && this.on("no", callBack.no);
+            callBack.done && this.on("done", callBack.done);
+            return this;
+        } 
+        
+        // 不存在 callback 使用 Promise 对象
+        else {
+            return new Promise((r) => {
+                this.on("done", r);
+            });
+        }
+    }
+
+    /**
+     * 请求加载时显示加载动画
+     * @param message 消息 可以为函数
+     * @param mask 使用蒙版阻止点击穿透
+     */
+    public showLoading(message: string | ((data?: Partial<I>) => string), mask: boolean = false): this {
+
+        // 获取标题
+        let title: string = message instanceof Function ? message(this.data) : message;
+        
+        this.on("request", () => {
+            wx.showLoading({
+                title, mask
+            })
+        });
+
+        this.on("complete", () => {
+            wx.hideLoading();
+        });
+
+        return this;
+    };
+
+    /**
+     * 显示导航栏加载动画
+     */
+    public showNavigationBarLoading(): this {
+
+        this.on("request", () => {
+            wx.showNavigationBarLoading()
+        });
+
+        this.on("complete", () => {
+            wx.hideNavigationBarLoading();
+        });
+
+        return this;
+    }
+
+    /**
+     * 请求失败后的提示语句
+     */
+    public showFailed(): this {
+
+        // 生成随机索引值
+        let randomIndex = Math.floor( 
+            Math.random() * API_FAILED_SHOW_MESSAGE.length
+        );
+
+        this.on("fail", () => {
+            wx.showToast({
+                title: API_FAILED_SHOW_MESSAGE[randomIndex], 
+                icon: "none"
+            });
+        });
+
+        return this;
+    };
 }
 
 /**
@@ -505,6 +626,12 @@ interface ICallBack<O extends IAnyData> {
     success?: (data: IAPIEvent<{}, O>["success"]) => any;
     fail?: (data: IAPIEvent<{}, O>["fail"]) => any;
     complete?: (data: IAPIEvent<{}, O>["complete"]) => any;
+}
+
+interface IResCallBack<O extends IAnyData, U extends IAnyData> {
+    ok?: (data: IAPIResultEvent<O, U>["ok"]) => any;
+    no?: (data: IAPIResultEvent<O, U>["no"]) => any;
+    done?: (data: IAPIResultEvent<O, U>["done"]) => any;
 }
 
 /**

@@ -62,7 +62,7 @@ implements Partial<ILifetime> {
             info: {
                 data: "abc"
             }
-        }).request().wait({
+        }).request().waitRequest({
             success: (d) => console.log(d)
         })
     }
