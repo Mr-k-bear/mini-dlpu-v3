@@ -32,6 +32,11 @@ type DeepReadonly<T> = {
  */
 type IParamSetting<T extends IAnyData> = {
     [P in keyof T]: {
+
+        /**
+         * 键值映射
+         */
+        mapKey?: string,
         
         /**
          * 默认值
@@ -130,13 +135,13 @@ type IAPIResultEvent<O extends IAnyData, U extends IAnyData> = {
      * 无论因为什么
      * 总之数据获取到
      */
-    no: { message: string } & U,
+    no: GeneralCallbackResult & U,
 
     /**
      * 完成了
      * 无论失败与否
      */
-    done: { message: string, data: O } & U
+    done: { data?: O } & GeneralCallbackResult & U
 }
 
 /**
@@ -343,14 +348,15 @@ class API<
         for (let key in this.params) {
             
             let data = this.data[key];
-            let { isHeader, isTemplate } = this.params[key];
+            let { isHeader, isTemplate, mapKey } = this.params[key];
+            let useKey = mapKey ?? key;
 
             // 加载数据
             if (!isTemplate) {
                 if (isHeader) {
-                    requestData.header![key] = data;
+                    requestData.header![useKey] = data;
                 } else {
-                    (requestData.data as IAnyData)[key] = data;
+                    (requestData.data as IAnyData)[useKey] = data;
                 }
             }
         }
@@ -594,6 +600,17 @@ class API<
     }
 
     /**
+     * 自动挂载失败回调
+     */
+    public addFailedCallBack(): this {
+        this.on("fail", (e) => {
+            this.emit("no", e as any);
+            this.emit("done", e as any);
+        });
+        return this;
+    }
+
+    /**
      * 请求失败后的提示语句
      */
     public showFailed(): this {
@@ -680,4 +697,4 @@ enum HTTPMethod {
 }
 
 export default API;
-export { API, IParamSetting, IAppAPIParam, ICallBack, HTTPMethod, RequestPolicy }
+export { API, IParamSetting, IAppAPIParam, ICallBack, HTTPMethod, RequestPolicy, GeneralCallbackResult }
