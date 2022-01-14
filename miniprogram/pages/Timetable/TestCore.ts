@@ -1,5 +1,5 @@
 import { Modular, Manager, ILifetime } from "../../core/Module";
-import { API, IParamSetting } from "../../core/Api";
+import { Login } from "../../api/Login";
 import { Storage } from "../../core/Storage";
 
 /**
@@ -27,44 +27,13 @@ implements Partial<ILifetime> {
         setTimeout(() => {
             s.set("be", 12);
         }, 1000)
-
-        interface ITestApiInput {
-            name: string,
-            id: number,
-            info: {
-                data: string
-            }
-        }
         
-        class TestApi extends API<ITestApiInput, {}> {
-        
-            public override params: IParamSetting<ITestApiInput> = {
-                name: {
-                    tester: "123",
-                    isHeader: true
-                },
-                id: {
-                    parse: (i) => ++i,
-                },
-                info: {}
-            }
-
-            public constructor() {
-                super();
-                this.initDebugLabel("TestApi");
-            }
-        }
-
-        let api = new TestApi();
-        api.param({
-            name: "123",
-            id: 456,
-            info: {
-                data: "abc"
-            }
-        }).request().waitRequest({
-            success: (d) => console.log(d)
-        })
+        new Login().param({studentId: "1806240113", password: "qazxsw123"})
+        .request().wait({
+            ok: (w) => {console.log("ok", w)},
+            no: (w) => {console.log("no", w)},
+            done: (w) => {console.log("done", w)}
+        });
     }
 }
 
