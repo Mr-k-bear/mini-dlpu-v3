@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 210 210" style="enable-background:new 0 0 210 210;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#F4F0F1;}
+	.st1{fill:#FFFFFF;}
+	.st2{fill:#3EA3D8;}
+	.st3{fill:#CCCCCC;}
+	.st4{fill:none;stroke:#CCCCCC;stroke-linecap:square;stroke-miterlimit:10;}
+	.st5{fill:none;stroke:#CCCCCC;stroke-miterlimit:10;}
+	.st6{fill:none;stroke:#CCCCCC;stroke-miterlimit:10;stroke-dasharray:1.9084,1.9084;}
+	.st7{fill:#1A1A1A;}
+	.st8{fill:none;stroke:#1A1A1A;stroke-width:3;stroke-miterlimit:10;}
+	.st9{fill:none;stroke:#1A1A1A;stroke-miterlimit:10;}
+	.st10{fill:none;stroke:#E6E6E6;stroke-miterlimit:10;}
+	.st11{fill:#666666;}
+	.st12{fill:none;stroke:#B3B3B3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st13{fill:#B3B3B3;}
+	.st14{opacity:0.05;}
+	.st15{clip-path:url(#SVGID_00000119800197593363267330000003343045337348892552_);}
+	.st16{fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
+	.st17{opacity:0.4;fill:#3EA3D8;}
+	.st18{fill:none;stroke:#3EA3D8;stroke-miterlimit:10;}
+	.st19{fill:none;stroke:#3EA3D8;stroke-width:11;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<g id="A1">
+	<g id="NAV_x5F_BAR_00000129914889952932149030000011711506177042644156_">
+	</g>
+	<g id="HEADER_x5F_BAR_00000015351907221170818370000001589878730520391302_">
+	</g>
+	<g id="FUNC_x5F_LIST">
+	</g>
+	<g id="MAIN_x5F_FUNC">
+	</g>
+	<g id="USER_x5F_CARD">
+		<g id="BG" class="st14">
+		</g>
+	</g>
+</g>
+<g id="ICON">
+</g>
+<g id="DEFAULT_x5F_AVATOR">
+	<circle class="st17" cx="105" cy="105" r="105"/>
+	<circle class="st2" cx="105" cy="79.22" r="36.19"/>
+	<path class="st2" d="M171.07,166.47c0,9.46-2.94,18.35-8.1,26.09C146.36,203.58,126.43,210,105,210s-41.36-6.42-57.97-17.44
+		c-5.16-7.74-8.1-16.63-8.1-26.09c0-0.38,0-0.75,0.02-1.12c-0.01-0.04,0-0.08,0-0.11c0.04-1.46,0.14-2.9,0.32-4.33
+		c0-0.02,0.01-0.05,0.01-0.08c3.43-17.58,31.54-31.28,65.72-31.28s62.29,13.7,65.72,31.28c0,0.03,0.01,0.06,0.01,0.08
+		c0.18,1.43,0.28,2.87,0.32,4.33c0,0.03,0.01,0.07,0,0.11C171.07,165.72,171.07,166.09,171.07,166.47z"/>
+</g>
+<g id="COLOR">
+</g>
+<g id="NAV_x5F_BAR">
+	<g id="ICON_x5F_SETTING">
+	</g>
+	<g id="ICON_x5F_INFO">
+	</g>
+	<g id="ICON_x5F_KCB">
+	</g>
+</g>
+<g id="HEADER_x5F_BAR">
+	<g id="BUTTON">
+	</g>
+	<g id="TOP">
+	</g>
+</g>
+</svg>
