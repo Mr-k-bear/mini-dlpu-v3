@@ -36,3 +36,14 @@ export const LOGGER_FILTER:Array<RegExp | string>[] = [
     // 输出警告和错误
     // ["WARN", "ERROR", "FATAL"],
 ];
+
+/**
+ * 请求失败的提示用语
+ * 请求失败时如果选择自动显示消息
+ * 则会从以下内容中选择
+ */
+export const API_FAILED_SHOW_MESSAGE: string[] = [
+    "失败啦(ó_ò。)", "服务器睡着了", "数据移民火星了",
+    "数据在半路走丢了", "服务器打了个瞌睡", "服务器被玩坏了",
+    "服务器在扶老奶奶过马路", "服务器累了", "服务器在拯救世界"
+]
