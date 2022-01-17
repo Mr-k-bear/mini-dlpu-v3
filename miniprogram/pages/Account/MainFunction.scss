@@ -1,1 +1,25 @@
 @import "../../app.scss";
+
+table.MFunc{
+    width: 100%;
+    
+   image.MFuncImg{
+    width: 20px;
+    height: 20px;
+    float: left;
+    padding-right: 20px;
+}
+    view.tabView1,view.tabView2,view.tabView3,view.tabView4,view.tabView5{
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    view.tabView1,view.tabView2,view.tabView3,view.tabView4{
+        border-bottom:1px solid gainsboro ;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    view.tabTxt{
+        letter-spacing: 1px;
+    }
+
+}
