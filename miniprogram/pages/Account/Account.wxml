@@ -11,6 +11,12 @@
             <open-data type="userAvatarUrl" />
         </view>
         <view class="info">
+
+            <!-- 主题变换按钮 -->
+            <view class="theme">
+                <image src="../../image/account/Account_Theme.svg" />
+            </view>
+            
             <view class="nick h1">
                 <open-data type="userNickName" />
             </view>

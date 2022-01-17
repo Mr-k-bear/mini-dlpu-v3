@@ -32,6 +32,10 @@ view.card {
                 0 0.3px 0.9px 0 rgba(0, 0, 0, .05);
 }
 
+image {
+    filter: $black-filter;
+}
+
 // 顶部导航栏阴影
 view.top-shadow {
     position: fixed;
@@ -75,6 +79,10 @@ view.h3 {
 
     view.card {
         background-color: $theme-color-dark-layout;
+    }
+
+    image {
+        filter: $white-filter;
     }
 
     view.h1 {
