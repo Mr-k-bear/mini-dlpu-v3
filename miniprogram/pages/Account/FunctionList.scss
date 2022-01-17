@@ -1,1 +1,19 @@
 @import "../../app.scss";
+
+$functionList-icon-width: 50px;
+
+
+view.userInfo{
+    padding-top:10px;
+    image{
+        width: $functionList-icon-width;
+        height: $functionList-icon-width;
+        padding-left: 20px;
+        filter: opacity(1);
+    }
+    view.text{
+        float: left;
+        font-size: 15px;
+        padding-left: 20px;
+    }
+}
