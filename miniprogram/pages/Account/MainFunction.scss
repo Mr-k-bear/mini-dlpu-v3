@@ -1,36 +1,39 @@
 @import "../../app.scss";
+
 //主要功能
-view.MainFuction {
-  height: 80px;
+view.main-function {
   display: flex;
-  padding-top: 10px;
-  padding-bottom: 8px;
+  margin-top: 20px;
+  padding: 0 !important;
+  width: 100% !important;
 
-  view.BranchFuntion {
-      margin-top: 12px;
-      margin-bottom: 12px;
-      float: left;
-      width: 25%;
-      border-right: 1px solid gainsboro;
+  view.branch-funtion {
+    padding: 13px 0;
+    width: 100%;
 
-      image.MFimage{
-        padding-top: 3%;
-        padding-left: 25%;
-        height: 50%;
-        width: 50%;
+    > view {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-self: center;
+      border-right: 1px solid rgba($color: #000000, $alpha: .1);
+
+      image {
+        height: 35px;
+        width: 35px;
       }
 
-      view.MFfont {
+      view {
         text-align: center;
-        font-size: 10px;
-        margin: 5px 0;
-        letter-spacing:2px;
+        margin-top: 5px;
+        font-size: .8em;
       }
+    }
   }
 }
 
 @media (prefers-color-scheme: dark) {
-  view.container view.user-card view.avatar{
-      filter: brightness(.8);
+  view.main-function view.branch-funtion > view {
+    border-right: 1px solid rgba($color: #ffffff, $alpha: .1);
   }
 }
