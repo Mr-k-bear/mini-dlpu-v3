@@ -1,30 +1,43 @@
 @import "../../app.scss";
 
-table.FuncList{
-    width: 100%;
-    
-   image.FuncListImg{
-    width: 25px;
-    height: 25px;
-    float: left;
-    padding-right: 20px;
-}
-    view.tabView1,view.tabView2,view.tabView3,view.tabView4,view.tabView5{
-        padding-top: 20px;
-        padding-bottom: 20px;
+view.function-list {
+    margin-top: 50rpx;
+    margin-bottom: 50rpx;
+    padding: 0 0 !important;
+    width: 100% !important;
+
+    view.function {
+        padding: 0 20px;
+        width: calc( 100% - 40px );
+        height: 55px;
         
-    }
-    view.tabView1,view.tabView2,view.tabView3,view.tabView4{
-        border-bottom:1px solid gainsboro ;
-        padding-top: 20px;
-        padding-bottom: 20px;
-    }
-    text.tabTxt{
-        letter-spacing: 1px;
-    }
-    image.FuncListImgT{
-        float: right;
-        width: 25px;
-        height: 25px;
+        > view {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba($color: #000000, $alpha: .1);
+
+            image.func-icon {
+                width: 26px;
+                height: 26px;
+            }
+
+            view {
+                margin-left: 15px;
+                flex-grow: 1;
+                font-size: .9em;
+            }
+
+            image.arrow {
+                width: 10px;
+                height: 10px;
+            }
+        }
     }
 }
+
+@media (prefers-color-scheme: dark) {
+    view.function-list view.function > view {
+      border-bottom: 1px solid rgba($color: #ffffff, $alpha: .1);
+    }
+  }

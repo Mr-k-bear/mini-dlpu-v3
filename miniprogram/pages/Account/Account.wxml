@@ -41,75 +41,75 @@
 
     <!--主要功能-->
     <view class="card main-function"><!--四个功能合在一起的容器-->
-        <view class="branch-funtion"><view><!--每个功能的容器-->
-            <image class="icon" src="../../image/account/Account_UserInfo.svg"></image><!--每个功能的图片-->
-            <view>账号信息</view><!--每个功能的文字-->
-        </view></view>
+        <view class="branch-funtion">
+            <view><!--每个功能的容器-->
+                <image class="icon" src="../../image/account/Account_UserInfo.svg"></image><!--每个功能的图片-->
+                <view>账号信息</view><!--每个功能的文字-->
+            </view>
+        </view>
 
-        <view class="branch-funtion"><view>
-            <image class="icon" src="../../image/account/Account_DateList.svg"></image>
-            <view>课表缓存</view>
-        </view></view>
+        <view class="branch-funtion">
+            <view>
+                <image class="icon" src="../../image/account/Account_DateList.svg"></image>
+                <view>课表缓存</view>
+            </view>
+        </view>
 
-        <view class="branch-funtion"><view>
-            <image class="icon" src="../../image/account/Account_Customer.svg"></image>
-            <view>功能定制</view>
-        </view></view>
+        <view class="branch-funtion">
+            <view>
+                <image class="icon" src="../../image/account/Account_Customer.svg"></image>
+                <view>功能定制</view>
+            </view>
+        </view>
 
-        <view class="branch-funtion"><view style="border-right: 0px;">
-            <image class="icon" src="../../image/account/Account_Settings.svg"></image>
-            <view>更多设置</view>
-        </view></view>
+        <view class="branch-funtion">
+            <view style="border-right: 0px;">
+                <image class="icon" src="../../image/account/Account_Settings.svg"></image>
+                <view>更多设置</view>
+            </view>
+        </view>
     </view>
 
-    <view class="user-card card">
-        <table class="FuncList">
-            <view class="tabView1">
-                <th>
-                    <td>
-                        <image class="FuncListImg" src="../../image/account/Account_Sponsor.svg"></image>
-                        <text class="tabTxt">赞助计划</text>
-                        <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
-                    </td>
-                </th>
+    <!-- 功能列表 -->
+    <view class="card function-list">
+        <view class="function">
+            <view>
+                <image class="icon func-icon" src="../../image/account/Account_Sponsor.svg" />
+                <view>赞助计划</view>
+                <image class="icon-sub arrow" src="../../image/account/Account_Arrow.svg" />
             </view>
-            <view class="tabView2">
-                <th>
-                    <td>
-                        <image class="FuncListImg" src="../../image/account/Account_PubilcAccount.svg"></image>
-                        <text class="tabTxt">公众号</text> 
-                        <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
-                    </td>
-                </th>
+        </view>
+
+        <view class="function">
+            <view>
+                <image class="icon func-icon" src="../../image/account/Account_PubilcAccount.svg" />
+                <view>公众号</view>
+                <image class="icon-sub arrow" src="../../image/account/Account_Arrow.svg" />
             </view>
-            <view class="tabView3">
-                <th>
-                    <td>
-                        <image class="FuncListImg" src="../../image/account/Account_FAQ.svg"></image>
-                        <text class="tabTxt">自助问答</text> 
-                        <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
-                    </td>
-                    
-                </th>
-            </view>       
-            <view class="tabView4">
-                <th>
-                    <td>
-                        <image class="FuncListImg" src="../../image/account/Account_AboutUs.svg"></image>
-                        <text class="tabTxt">关于我们</text> 
-                        <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
-                    </td>
-                </th>
-            </view>    
-            <view class="tabView5">
-                <th>
-                    <td>
-                        <image class="FuncListImg" src="../../image/account/Account_Support.svg"></image> 
-                        <text class="tabTxt">联系客服</text> 
-                        <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
-                    </td>
-                </th>
-            </view>   
-        </table>
+        </view>
+
+        <view class="function">
+            <view>
+                <image class="icon func-icon" src="../../image/account/Account_FAQ.svg" />
+                <view>自助问答</view>
+                <image class="icon-sub arrow" src="../../image/account/Account_Arrow.svg" />
+            </view>
+        </view>
+
+        <view class="function">
+            <view>
+                <image class="icon func-icon" src="../../image/account/Account_AboutUs.svg" />
+                <view>关于我们</view>
+                <image class="icon-sub arrow" src="../../image/account/Account_Arrow.svg" />
+            </view>
+        </view>
+
+        <view class="function">
+            <view style="border-bottom: 0px;">
+                <image class="icon func-icon" src="../../image/account/Account_Support.svg" />
+                <view>联系客服</view>
+                <image class="icon-sub arrow" src="../../image/account/Account_Arrow.svg" />
+            </view>
+        </view>
     </view>
 </view>
