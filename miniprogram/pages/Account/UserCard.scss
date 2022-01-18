@@ -2,22 +2,32 @@
 
 // 用户卡片
 view.user-card {
-    margin-top: 20px;
-    height: 100px;
     display: flex;
+    align-items: center;
     padding-top: 20px;
     padding-bottom: 20px;
 
     view.avatar {
-        width: 80px;
-        height: 80px;
+        width: 70px;
+        height: 70px;
         border-radius: 1000px;
         overflow: hidden;
     }
     
     view.info {
-        width: calc(100% - 80px - 20px);
+        flex-grow: 1;
         padding-left: 20px;
+
+        view.theme {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+
+            image {
+                width: 25px;
+                height: 25px;
+            }
+        }
         
         view.nick {
             margin: 4px 0;
