@@ -1,9 +1,9 @@
 @import "../../app.scss";
 
-table.MFunc{
+table.FuncList{
     width: 100%;
     
-   image.MFuncImg{
+   image.FuncListImg{
     width: 25px;
     height: 25px;
     float: left;
@@ -22,7 +22,7 @@ table.MFunc{
     text.tabTxt{
         letter-spacing: 1px;
     }
-    image.MFuncImgT{
+    image.FuncListImgT{
         float: right;
         width: 25px;
         height: 25px;
