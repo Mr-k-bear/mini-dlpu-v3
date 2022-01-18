@@ -14,14 +14,28 @@
 
             <!-- 主题变换按钮 -->
             <view class="theme">
-                <image src="../../image/account/Account_Theme.svg" />
+                <image class="icon-sub" src="../../image/account/Account_Theme.svg" />
             </view>
             
+            <!-- 用户昵称 -->
             <view class="nick h1">
                 <open-data type="userNickName" />
             </view>
-            <view class="student">秦浩轩</view>
-            <view class="student">1806240113</view>
+
+            <!-- 学生信息 -->
+            <view class="student">
+                <view class="name">秦浩轩</view>
+                <view class="certified">
+                    <view class="certifi-info">已认证</view>
+                    <view class="text-icon">√</view>
+                </view>
+            </view>
+
+            <!-- 学号信息 -->
+            <view class="student-id">1806240113</view>
+
+            <!-- 学校 -->
+            <view class="school">大连工业大学</view>
         </view>
     </view>
 
