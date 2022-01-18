@@ -1,1 +1,39 @@
 @import "../../app.scss";
+
+//主要功能
+view.main-function {
+  display: flex;
+  margin-top: 20px;
+  padding: 0 !important;
+  width: 100% !important;
+
+  view.branch-funtion {
+    padding: 13px 0;
+    width: 100%;
+
+    > view {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-self: center;
+      border-right: 1px solid rgba($color: #000000, $alpha: .1);
+
+      image {
+        height: 35px;
+        width: 35px;
+      }
+
+      view {
+        text-align: center;
+        margin-top: 5px;
+        font-size: .8em;
+      }
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  view.main-function view.branch-funtion > view {
+    border-right: 1px solid rgba($color: #ffffff, $alpha: .1);
+  }
+}

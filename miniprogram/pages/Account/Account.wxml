@@ -39,4 +39,27 @@
         </view>
     </view>
 
+    <!--主要功能-->
+    <view class="card main-function"><!--四个功能合在一起的容器-->
+        <view class="branch-funtion"><view><!--每个功能的容器-->
+            <image class="icon" src="../../image/account/Account_UserInfo.svg"></image><!--每个功能的图片-->
+            <view>账号信息</view><!--每个功能的文字-->
+        </view></view>
+
+        <view class="branch-funtion"><view>
+            <image class="icon" src="../../image/account/Account_DateList.svg"></image>
+            <view>课表缓存</view>
+        </view></view>
+
+        <view class="branch-funtion"><view>
+            <image class="icon" src="../../image/account/Account_Customer.svg"></image>
+            <view>功能定制</view>
+        </view></view>
+
+        <view class="branch-funtion"><view style="border-right: 0px;">
+            <image class="icon" src="../../image/account/Account_Settings.svg"></image>
+            <view>更多设置</view>
+        </view></view>
+
+    </view>
 </view>
