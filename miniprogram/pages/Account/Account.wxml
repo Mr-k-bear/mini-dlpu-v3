@@ -26,3 +26,29 @@
     </view>
 
 </view>
+<view class="container">
+
+        <!--主要功能-->
+     <view class="MainFuction card"><!--四个功能合在一起的容器-->
+        <view class="BranchFuntion"><!--每个功能的容器-->
+            <image class="MFimage" src="../../image/account/Account_UserInfo.svg"></image><!--每个功能的图片-->
+            <view class="MFfont">账号信息</view><!--每个功能的文字-->
+        </view>
+
+        <view class="BranchFuntion">
+            <image class="MFimage" src="../../image/account/Account_DateList.svg"></image>
+            <view class="MFfont">课表缓存</view>
+        </view>
+
+        <view class="BranchFuntion">
+            <image class="MFimage" src="../../image/account/Account_Customer.svg"></image>
+            <view class="MFfont">功能定制</view>
+        </view>
+
+        <view class="BranchFuntion" style="border-right: 0px;">
+            <image class="MFimage" src="../../image/account/Account_Settings.svg"></image>
+            <view class="MFfont">更多设置</view>
+        </view>
+
+    </view>
+</view>
