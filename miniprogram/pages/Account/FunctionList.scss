@@ -12,15 +12,19 @@ table.MFunc{
     view.tabView1,view.tabView2,view.tabView3,view.tabView4,view.tabView5{
         padding-top: 20px;
         padding-bottom: 20px;
+        
     }
     view.tabView1,view.tabView2,view.tabView3,view.tabView4{
         border-bottom:1px solid gainsboro ;
         padding-top: 20px;
         padding-bottom: 20px;
     }
-    view.tabTxt{
+    text.tabTxt{
         letter-spacing: 1px;
-        
     }
-
+    image.MFuncImgT{
+        float: right;
+        width: 25px;
+        height: 25px;
+    }
 }

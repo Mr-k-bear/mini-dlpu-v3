@@ -24,17 +24,17 @@
             <view class="student">1806240113</view>
         </view>
     </view>
+</view>
 
-    
+<view class="container">
     <view class="user-card card">
         <table class="MFunc">
         <view class="tabView1">
             <th>
                 <td>
                     <image class="MFuncImg" src="../../image/account/Account_Sponsor.svg"></image>
-                </td>
-                <td>
-                    <view class="tabTxt">赞助计划</view>
+                    <text class="tabTxt">赞助计划</text>
+                    <image class="MFuncImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
                 </td>
             </th>
         </view>
@@ -42,39 +42,36 @@
             <th>
                 <td>
                     <image class="MFuncImg" src="../../image/account/Account_PubilcAccount.svg"></image>
+                    <text class="tabTxt">公众号</text> 
+                    <image class="MFuncImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
                 </td>
-            <td>
-                <view class="tabTxt">公众号</view>
-            </td>
             </th>
         </view>
         <view class="tabView3">
             <th>
                 <td>
                     <image class="MFuncImg" src="../../image/account/Account_FAQ.svg"></image>
+                    <text class="tabTxt">自助问答</text> 
+                    <image class="MFuncImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
                 </td>
-                <td>
-                    <view class="tabTxt">自助问答</view>
-                </td>
+                
             </th>
         </view>       
         <view class="tabView4">
             <th>
                 <td>
                     <image class="MFuncImg" src="../../image/account/Account_AboutUs.svg"></image>
-                </td>
-                <td>
-                    <view class="tabTxt">关于我们</view>
+                    <text class="tabTxt">关于我们</text> 
+                    <image class="MFuncImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
                 </td>
             </th>
         </view>    
         <view class="tabView5">
             <th>
                 <td>
-                    <image class="MFuncImg" src="../../image/account/Account_Support.svg"></image>
-                </td>
-                <td>
-                    <view class="tabTxt">联系客服</view>
+                    <image class="MFuncImg" src="../../image/account/Account_Support.svg"></image> 
+                    <text class="tabTxt">联系客服</text> 
+                    <image class="MFuncImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
                 </td>
             </th>
         </view>   
