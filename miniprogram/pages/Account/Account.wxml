@@ -14,67 +14,102 @@
 
             <!-- 主题变换按钮 -->
             <view class="theme">
-                <image src="../../image/account/Account_Theme.svg" />
+                <image class="icon-sub" src="../../image/account/Account_Theme.svg" />
             </view>
             
+            <!-- 用户昵称 -->
             <view class="nick h1">
                 <open-data type="userNickName" />
             </view>
-            <view class="student">秦浩轩</view>
-            <view class="student">1806240113</view>
+
+            <!-- 学生信息 -->
+            <view class="student">
+                <view class="name">秦浩轩</view>
+                <view class="certified">
+                    <view class="certifi-info">已认证</view>
+                    <view class="text-icon">√</view>
+                </view>
+            </view>
+
+            <!-- 学号信息 -->
+            <view class="student-id">1806240113</view>
+
+            <!-- 学校 -->
+            <view class="school">大连工业大学</view>
         </view>
     </view>
-</view>
 
-<view class="container">
+    <!--主要功能-->
+    <view class="card main-function"><!--四个功能合在一起的容器-->
+        <view class="branch-funtion"><view><!--每个功能的容器-->
+            <image class="icon" src="../../image/account/Account_UserInfo.svg"></image><!--每个功能的图片-->
+            <view>账号信息</view><!--每个功能的文字-->
+        </view></view>
+
+        <view class="branch-funtion"><view>
+            <image class="icon" src="../../image/account/Account_DateList.svg"></image>
+            <view>课表缓存</view>
+        </view></view>
+
+        <view class="branch-funtion"><view>
+            <image class="icon" src="../../image/account/Account_Customer.svg"></image>
+            <view>功能定制</view>
+        </view></view>
+
+        <view class="branch-funtion"><view style="border-right: 0px;">
+            <image class="icon" src="../../image/account/Account_Settings.svg"></image>
+            <view>更多设置</view>
+        </view></view>
+    </view>
+
     <view class="user-card card">
         <table class="FuncList">
-        <view class="tabView1">
-            <th>
-                <td>
-                    <image class="FuncListImg" src="../../image/account/Account_Sponsor.svg"></image>
-                    <text class="tabTxt">赞助计划</text>
-                    <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
-                </td>
-            </th>
-        </view>
-        <view class="tabView2">
-            <th>
-                <td>
-                    <image class="FuncListImg" src="../../image/account/Account_PubilcAccount.svg"></image>
-                    <text class="tabTxt">公众号</text> 
-                    <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
-                </td>
-            </th>
-        </view>
-        <view class="tabView3">
-            <th>
-                <td>
-                    <image class="FuncListImg" src="../../image/account/Account_FAQ.svg"></image>
-                    <text class="tabTxt">自助问答</text> 
-                    <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
-                </td>
-                
-            </th>
-        </view>       
-        <view class="tabView4">
-            <th>
-                <td>
-                    <image class="FuncListImg" src="../../image/account/Account_AboutUs.svg"></image>
-                    <text class="tabTxt">关于我们</text> 
-                    <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
-                </td>
-            </th>
-        </view>    
-        <view class="tabView5">
-            <th>
-                <td>
-                    <image class="FuncListImg" src="../../image/account/Account_Support.svg"></image> 
-                    <text class="tabTxt">联系客服</text> 
-                    <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
-                </td>
-            </th>
-        </view>   
+            <view class="tabView1">
+                <th>
+                    <td>
+                        <image class="FuncListImg" src="../../image/account/Account_Sponsor.svg"></image>
+                        <text class="tabTxt">赞助计划</text>
+                        <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
+                    </td>
+                </th>
+            </view>
+            <view class="tabView2">
+                <th>
+                    <td>
+                        <image class="FuncListImg" src="../../image/account/Account_PubilcAccount.svg"></image>
+                        <text class="tabTxt">公众号</text> 
+                        <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
+                    </td>
+                </th>
+            </view>
+            <view class="tabView3">
+                <th>
+                    <td>
+                        <image class="FuncListImg" src="../../image/account/Account_FAQ.svg"></image>
+                        <text class="tabTxt">自助问答</text> 
+                        <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
+                    </td>
+                    
+                </th>
+            </view>       
+            <view class="tabView4">
+                <th>
+                    <td>
+                        <image class="FuncListImg" src="../../image/account/Account_AboutUs.svg"></image>
+                        <text class="tabTxt">关于我们</text> 
+                        <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
+                    </td>
+                </th>
+            </view>    
+            <view class="tabView5">
+                <th>
+                    <td>
+                        <image class="FuncListImg" src="../../image/account/Account_Support.svg"></image> 
+                        <text class="tabTxt">联系客服</text> 
+                        <image class="FuncListImgT"src="../../image/account/Account_PubilcAccount.svg"></image>
+                    </td>
+                </th>
+            </view>   
         </table>
     </view>
 </view>
