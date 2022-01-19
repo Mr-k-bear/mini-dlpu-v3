@@ -49,6 +49,7 @@ view.user-card {
             text-overflow: ellipsis;
         }
 
+        // 学生信息
         view.student {
             display: flex;
             align-items: center;
@@ -65,8 +66,10 @@ view.user-card {
                 justify-content: center;
                 align-items: center;
 
-                view.text-icon {
-                    margin-left: .3em;
+                image.text-icon {
+                    margin-left: .25em;
+                    width: 10px;
+                    height: 10px;
                 }
             }
         }
