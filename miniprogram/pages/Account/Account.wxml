@@ -1,3 +1,5 @@
+<!-- 蒙版 -->
+<view class="mask" bindtap="mask$handleClickMask" style="display:{{mask$isShow ? 'block' : 'none'}}"></view>
 
 <!-- 顶部的阴影 -->
 <view class="top-shadow"></view>
@@ -14,7 +16,9 @@
 
             <!-- 主题变换按钮 -->
             <view class="theme">
-                <image class="icon-sub" src="../../image/account/Account_Theme.svg" />
+                <view bindtap="userCard$changeTheme">
+                    <image class="icon-sub" src="../../image/account/Account_Theme.svg" />
+                </view>
             </view>
             
             <!-- 用户昵称 -->
@@ -27,7 +31,7 @@
                 <view class="name">秦浩轩</view>
                 <view class="certified">
                     <view class="certifi-info">已认证</view>
-                    <view class="text-icon">√</view>
+                    <image class="text-icon" src="../../image/account/Account_OK.svg"></image>
                 </view>
             </view>
 
