@@ -1,9 +1,21 @@
 import { Modular, Manager } from "../../core/Module";
+import { Mask } from "../../modular/Mask/Mask";
 
-class UserCard<M extends Manager> extends Modular<M> {
-    
+type IUserCardDependent<M extends Manager> = {
+    mask: Mask<M>
+}
+
+class UserCard<M extends Manager> extends Modular<M, IUserCardDependent<M>> {
+
     public override onLoad() {
-        // Do something
+        this.setFunc(this.handleChangeTheme, "changeTheme")
+    }
+    
+    /**
+     * 处理主题更换
+     */
+    private handleChangeTheme() {
+        this.depends?.mask.showMask();
     }
 }
 
