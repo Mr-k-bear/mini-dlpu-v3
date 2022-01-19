@@ -76,42 +76,10 @@
 
     <!-- 功能列表 -->
     <view class="card function-list">
-        <view class="function">
-            <view>
-                <image class="icon func-icon" src="../../image/account/Account_Sponsor.svg" />
-                <view>赞助计划</view>
-                <image class="icon-sub arrow" src="../../image/account/Account_Arrow.svg" />
-            </view>
-        </view>
-
-        <view class="function">
-            <view>
-                <image class="icon func-icon" src="../../image/account/Account_PubilcAccount.svg" />
-                <view>公众号</view>
-                <image class="icon-sub arrow" src="../../image/account/Account_Arrow.svg" />
-            </view>
-        </view>
-
-        <view class="function">
-            <view>
-                <image class="icon func-icon" src="../../image/account/Account_FAQ.svg" />
-                <view>自助问答</view>
-                <image class="icon-sub arrow" src="../../image/account/Account_Arrow.svg" />
-            </view>
-        </view>
-
-        <view class="function">
-            <view>
-                <image class="icon func-icon" src="../../image/account/Account_AboutUs.svg" />
-                <view>关于我们</view>
-                <image class="icon-sub arrow" src="../../image/account/Account_Arrow.svg" />
-            </view>
-        </view>
-
-        <view class="function">
-            <view style="border-bottom: 0px;">
-                <image class="icon func-icon" src="../../image/account/Account_Support.svg" />
-                <view>联系客服</view>
+        <view class="function" wx:for="{{functionList$functionList}}" wx:for-index="index" wx:key="id">
+            <view style="{{item.id == (functionList$functionList.length - 1) ? 'border-bottom: 0px' : ''}}">
+                <image class="icon func-icon" src="../../image/account/Account_{{item.iconUrl}}.svg" />
+                <view>{{item.displayName}}</view>
                 <image class="icon-sub arrow" src="../../image/account/Account_Arrow.svg" />
             </view>
         </view>
