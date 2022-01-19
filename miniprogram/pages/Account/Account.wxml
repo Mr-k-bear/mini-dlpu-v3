@@ -27,7 +27,7 @@
                 <view class="name">秦浩轩</view>
                 <view class="certified">
                     <view class="certifi-info">已认证</view>
-                    <view class="text-icon">√</view>
+                    <image class="text-icon" src="../../image/account/Account_OK.svg"></image>
                 </view>
             </view>
 
