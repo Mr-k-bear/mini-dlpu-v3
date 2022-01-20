@@ -57,8 +57,6 @@ type IScheduleOutput = {
  * 请求成功后将获得教务处返回的课程表JSON文件
  */
 class Schedlue extends EduBase<IScheduleInput, IScheduleOutput> {
-    
-    public override baseUrl: string = "https://jwc.2333.pub";
  
     public override url = "/course_timetable";
 
