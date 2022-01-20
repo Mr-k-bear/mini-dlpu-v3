@@ -1,5 +1,6 @@
 <!-- 蒙版 -->
-<view class="mask" bindtap="mask$handleClickMask" style="display:{{mask$isShow ? 'block' : 'none'}}"></view>
+<view class="mask {{  mask$isShow ? 'show' : 'hide' }} {{ mask$isDisplay ? 'block' : 'none' }}" 
+    bindtap="mask$handleClickMask"></view>
 
 <!-- 顶部的阴影 -->
 <view class="top-shadow"></view>
