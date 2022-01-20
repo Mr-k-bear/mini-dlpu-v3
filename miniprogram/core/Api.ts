@@ -698,4 +698,4 @@ enum HTTPMethod {
 }
 
 export default API;
-export { API, IParamSetting, IAppAPIParam, ICallBack, HTTPMethod, RequestPolicy, GeneralCallbackResult }
+export { API, IParamSetting, IAppAPIParam, IAnyData, ICallBack, HTTPMethod, RequestPolicy, GeneralCallbackResult }
