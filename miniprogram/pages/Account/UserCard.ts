@@ -1,8 +1,10 @@
+import Popups from "modular/Popups/Popups";
 import { Modular, Manager } from "../../core/Module";
 import { Mask } from "../../modular/Mask/Mask";
 
 type IUserCardDependent<M extends Manager> = {
     mask: Mask<M>
+    popups:Popups<M>
 }
 
 class UserCard<M extends Manager> extends Modular<M, IUserCardDependent<M>> {
@@ -16,6 +18,7 @@ class UserCard<M extends Manager> extends Modular<M, IUserCardDependent<M>> {
      */
     private handleChangeTheme() {
         this.depends?.mask.showMask();
+        this.depends?.popups.showPopups();
     }
 }
 

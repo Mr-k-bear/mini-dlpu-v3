@@ -1,0 +1,15 @@
+@import "../../app.scss";
+
+view.popups {
+    position: fixed;
+    width: 75%;
+    height: 75%;
+    margin:auto;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    background-color: $theme-color-light-layout;
+    border-radius: 15px;
+    z-index: 2;
+}

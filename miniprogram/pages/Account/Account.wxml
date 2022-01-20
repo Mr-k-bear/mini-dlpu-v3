@@ -1,6 +1,9 @@
 <!-- 蒙版 -->
 <view class="mask" bindtap="mask$handleClickMask" style="display:{{mask$isShow ? 'block' : 'none'}}"></view>
 
+<!-- 弹出层 -->
+<view class="popups" style="display:{{popups$isShow ? 'block' : 'none'}}"></view>
+
 <!-- 顶部的阴影 -->
 <view class="top-shadow"></view>
 
