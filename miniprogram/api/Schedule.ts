@@ -13,30 +13,62 @@ interface IScheduleInput {
     semester: string;
 }
 
+interface IClassData {
+
+    /**
+     * 课程名字
+     */
+    name: string;
+
+    /**
+     * 上课地点
+     */
+    room?: string;
+
+    /**
+     * 课程老师
+     */
+    teacher?: string;
+
+    /**
+     * 周数
+     */
+    week: string;
+}
+
 interface IScheduleOutput {
 
-}
+    /**
+     * 课程列表
+     */
+    classList: IClassData[];
+
+    /**
+     * 稀疏矩阵编号
+     */
+    index: number;
+}[];
 
 interface IScheduleEvent {
     /**
      * session 过期
      */
-     expire: GeneralCallbackResult;
+    expire: GeneralCallbackResult;
 
      /**
       * 登录失败
       */
-     unauthorized: GeneralCallbackResult;
+    unauthorized: GeneralCallbackResult;
  
      /**
       * 未知的问题
       */
-     error: GeneralCallbackResult;
+    error: GeneralCallbackResult;
  
      /**
       * 数据损坏或丢失
       */
-     badData: GeneralCallbackResult;
+    badData: GeneralCallbackResult;
 }
 
 
@@ -73,3 +105,6 @@ class Schedlue extends API<IScheduleInput, IScheduleOutput, IScheduleEvent> {
         this.addFailedCallBack();
     }
 }
+
+export { Schedlue };
+export default Schedlue;
