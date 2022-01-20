@@ -28,12 +28,12 @@ implements Partial<ILifetime> {
             s.set("be", 12);
         }, 1000)
         
-        // new Login().param({studentId: "1806240113", password: ""})
-        // .request().wait({
-        //     ok: (w) => {console.log("ok", w)},
-        //     no: (w) => {console.log("no", w)},
-        //     done: (w) => {console.log("done", w)}
-        // });
+        new Login().param({studentId: "2017060129", password: "hch2000210%"})
+        .request().wait({
+            ok: (w) => {console.log("ok", w)},
+            no: (w) => {console.log("no", w)},
+            done: (w) => {console.log("done", w)}
+        });
     }
 }
 

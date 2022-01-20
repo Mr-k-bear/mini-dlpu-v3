@@ -48,9 +48,9 @@ interface IScheduleEvent {
  */
 class Schedlue extends API<IScheduleInput, IScheduleOutput, IScheduleEvent> {
     
-    public override baseUrl: string = "jwc.2333.pub/course_timetable";
+    public override baseUrl: string = "jwc.2333.pub";
  
-    public override url = "?semester=" + IScheduleInput.semester;
+    public override url = "/course_timetable";
 
     public override method: HTTPMethod = HTTPMethod.GET;
 
