@@ -1,4 +1,5 @@
-import { API, HTTPMethod, IParamSetting, GeneralCallbackResult} from "../core/Api";
+import { HTTPMethod, IParamSetting } from "../core/Api";
+import { EduBase } from "./EduBase";
 
 interface IScheduleInput {
 
@@ -36,7 +37,7 @@ interface IClassData {
     week: string;
 }
 
-interface IScheduleOutput {
+type IScheduleOutput = {
 
     /**
      * 课程列表
@@ -49,38 +50,15 @@ interface IScheduleOutput {
     index: number;
 }[];
 
-interface IScheduleEvent {
-    /**
-     * session 过期
-     */
-    expire: GeneralCallbackResult;
-
-     /**
-      * 登录失败
-      */
-    unauthorized: GeneralCallbackResult;
- 
-     /**
-      * 未知的问题
-      */
-    error: GeneralCallbackResult;
- 
-     /**
-      * 数据损坏或丢失
-      */
-    badData: GeneralCallbackResult;
-}
-
-
 /**
  * Schedule API
  * 需要session与semester
  * 此 API 用来向教务处发起获取课程表的请求
  * 请求成功后将获得教务处返回的课程表JSON文件
  */
-class Schedlue extends API<IScheduleInput, IScheduleOutput, IScheduleEvent> {
+class Schedlue extends EduBase<IScheduleInput, IScheduleOutput> {
     
-    public override baseUrl: string = "jwc.2333.pub";
+    public override baseUrl: string = "https://jwc.2333.pub";
  
     public override url = "/course_timetable";
 
@@ -102,7 +80,31 @@ class Schedlue extends API<IScheduleInput, IScheduleOutput, IScheduleEvent> {
         super();
         this.initDebugLabel("Schedule");
         
-        this.addFailedCallBack();
+        this.useEduCallback((data) => {
+            const res: IScheduleOutput = [];
+
+            for( let i = 0; i < data.length; i++ ) {
+                const classList: IClassData[] = [];
+                const CTTDetails = data[i].CTTDetails ?? [];
+
+                for( let j = 0; j < CTTDetails.length; j++ ) {
+
+                    classList.push({
+                        name: CTTDetails[j].Name,
+                        room: CTTDetails[j].Room,
+                        teacher: CTTDetails[j].Teacher,
+                        week: CTTDetails[j].Week,
+                    })
+                }
+
+                res.push({
+                    classList,
+                    index: data[i].Id
+                })
+            }
+            return res;
+
+        });
     }
 }
 
