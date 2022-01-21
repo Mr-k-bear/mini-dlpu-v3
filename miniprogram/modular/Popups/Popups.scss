@@ -13,3 +13,37 @@ view.popups {
     border-radius: 15px;
     z-index: 2;
 }
+view.popups.block {
+    display: block;
+}
+view.popups.none {
+    display: none;
+}
+
+view.popups.show {
+    animation-duration: 0.5s;
+    animation-name: show;
+}
+
+view.popups.hide {
+    animation-duration: 0.5s;
+    animation-name: hide;
+}
+
+@keyframes show{
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes hide{
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
