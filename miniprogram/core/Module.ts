@@ -491,6 +491,27 @@ class Manager<WXC extends AnyWXContext = AnyWXContext> {
         })
     }
 
+    /**
+     * 异步页面加载
+     * 
+     * *注意*
+     * 页面模块加载后，必须手动执行 loadAllModule
+     * loadAllModule Modular 才会真正的被加载
+     * 模块加载后可以处理逻辑绑定
+     */
+    public static async PageAsync(): Promise<{
+        manager: Manager<AnyWXContext>, 
+        query: Record<string, string | undefined>
+    }> {
+        return new Promise((solve) => {
+            Page({
+                async onLoad(query) {
+                    let manager = new Manager(this);
+                    await solve({ manager, query });
+                }
+            })
+        });
+    }
 }
 
 export { Manager, Modular, AnyWXContext, WXContext, ILifetime}

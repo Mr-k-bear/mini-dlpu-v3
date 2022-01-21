@@ -3,11 +3,6 @@ import { Modular, Manager } from "../../core/Module";
 interface IFunctionListItem {
 
     /**
-     * id
-     */
-    id?: number
-
-    /**
      * 显示名称
      */
     displayName: string;
@@ -17,10 +12,6 @@ interface IFunctionListItem {
      */
     iconUrl: string;
 }
-
-interface IFunctionListData {
-    functionList?: IFunctionListItem[];
-};
 
 class FunctionList<M extends Manager> extends Modular<M> {
 
@@ -32,18 +23,12 @@ class FunctionList<M extends Manager> extends Modular<M> {
         { displayName: "联系客服", iconUrl: "Support" }
     ];
 
-    public data: IFunctionListData = {
-        functionList: undefined
+    public data = {
+        functionList: FunctionList.functionList
     };
     
     public override onLoad() {
-        console.log(FunctionList.functionList)
-        this.setData({
-            functionList: FunctionList.functionList.map((value, index) => {
-                value.id = index;
-                return value;
-            })
-        })
+        // Do something
     }
 }
 

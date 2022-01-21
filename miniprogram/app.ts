@@ -1,9 +1,9 @@
-import { IAppAPIParam } from "./core/Api";
+import { IAppAPIParam, IAnyData } from "./core/Api";
 import { IAppStorageParam, Storage, IStorageData } from "./core/Storage";
 import { Logger, LevelLogLabel, LifeCycleLogLabel } from "./core/Logger";
 
 
-App<IAppAPIParam & IAppStorageParam>({
+App<IAppAPIParam & IAppStorageParam & IAnyData>({
 
     /**
      * API 模块需要的全局数据

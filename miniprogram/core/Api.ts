@@ -168,16 +168,17 @@ class API<
 > {
 
     /**
-     * 基础 URL
-     * TODO: 这里可能涉及负载均衡
+     * 默认调试标签
      */
-    public static get baseUrl():string {
-        return "https://jwc.nogg.cn";
-    }
-
     public static defaultLogLabel:LogLabel = new LogLabel(
         `API:API`, colorRadio(200, 120, 222)
     );
+    
+    /**
+     * 基础 URL
+     * TODO: 这里可能涉及负载均衡
+     */
+    public baseUrl: string = "https://jwc.nogg.cn";
 
     /**
      * Logger 使用的标签
@@ -319,7 +320,7 @@ class API<
 
         // 重置请求数据
         const requestData:IWxRequestOption<O> = this.requestData = {
-            url: API.baseUrl + this.url,
+            url: this.baseUrl + this.url,
             data: {}, header: {},
             timeout: this.timeout,
             method: this.method,
@@ -697,4 +698,4 @@ enum HTTPMethod {
 }
 
 export default API;
-export { API, IParamSetting, IAppAPIParam, ICallBack, HTTPMethod, RequestPolicy, GeneralCallbackResult }
+export { API, IParamSetting, IAppAPIParam, IAnyData, ICallBack, HTTPMethod, RequestPolicy, GeneralCallbackResult }
