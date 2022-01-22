@@ -13,6 +13,10 @@ export type EventHandlerMap<Events extends Record<EventType, any>> = Map<
 	EventHandlerList<Events[keyof Events]>
 >;
 
+// Emitter function type
+type IEmitParamType<E extends Record<EventType, any>, K extends keyof E> = 
+	E[K] extends ( undefined | void ) ? [K] : [K, E[K]];
+
 export class Emitter<Events extends Record<EventType, any>> {
 	
 	/**
@@ -74,7 +78,8 @@ export class Emitter<Events extends Record<EventType, any>> {
 	 * @param {Any} [evt] Any value (object is recommended and powerful), passed to each handler
 	 * @memberOf mitt
 	 */
-	emit<Key extends keyof Events>(type: Key, evt: Events[Key]) {
+	public emit<Key extends keyof Events>(...param: IEmitParamType<Events, Key>): this {
+		const [ type, evt ] = param;
 		let handlers = this.all!.get(type);
 		if (handlers) {
 			(handlers as EventHandlerList<Events[keyof Events]>)
@@ -83,5 +88,6 @@ export class Emitter<Events extends Record<EventType, any>> {
 					handler(evt!);
 				});
 		}
+		return this;
 	}
 }
