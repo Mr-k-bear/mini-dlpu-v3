@@ -316,7 +316,7 @@ class API<
         }
 
         // 触发数据初始化事件
-        this.emit("initData", this.data);
+        (this as Emitter<IAnyData>).emit("initData", this.data);
 
         // 重置请求数据
         const requestData:IWxRequestOption<O> = this.requestData = {
@@ -343,7 +343,7 @@ class API<
         }
 
         // 触发数据解析
-        this.emit("parseRequestData", this.data);
+        (this as Emitter<IAnyData>).emit("parseRequestData", this.data);
 
         // 数据收集
         for (let key in this.params) {
@@ -461,18 +461,18 @@ class API<
         let request = () => {
 
             // 触发请求发送事件
-            this.emit("request", this.requestData!)
+            (this as Emitter<IAnyData>).emit("request", this.requestData!)
 
             wx.request<O>({
                 ...this.requestData!,
                 success: (e) => {
-                    this.emit("success", e);
+                    (this as Emitter<IAnyData>).emit("success", e);
                 },
                 fail: (e) => {
-                    this.emit("fail", e);
+                    (this as Emitter<IAnyData>).emit("fail", e);
                 },
                 complete: (e) => {
-                    this.emit("complete", e);
+                    (this as Emitter<IAnyData>).emit("complete", e);
                 }
             });
         }
@@ -490,12 +490,12 @@ class API<
                 // 使用上次请求结果
                 if (this.policy === RequestPolicy.useLastRequest) {
                     lastAPI.on("success", (e) => {
-                        this.emit("success", e as SuccessCallbackResult<O>);
-                        this.emit("complete", {errMsg: e.errMsg});
+                        (this as Emitter<IAnyData>).emit("success", e as SuccessCallbackResult<O>);
+                        (this as Emitter<IAnyData>).emit("complete", {errMsg: e.errMsg});
                     });
                     lastAPI.on("fail", (e) => {
-                        this.emit("fail", e);
-                        this.emit("complete", {errMsg: e.errMsg});
+                        (this as Emitter<IAnyData>).emit("fail", e);
+                        (this as Emitter<IAnyData>).emit("complete", {errMsg: e.errMsg});
                     });
                 }
 
@@ -605,8 +605,8 @@ class API<
      */
     public addFailedCallBack(): this {
         this.on("fail", (e) => {
-            this.emit("no", e as any);
-            this.emit("done", e as any);
+            (this as Emitter<IAnyData>).emit("no", e as any);
+            (this as Emitter<IAnyData>).emit("done", e as any);
         });
         return this;
     }
