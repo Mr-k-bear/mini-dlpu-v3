@@ -24,7 +24,7 @@ class UserCard<M extends Manager> extends Modular<M, IUserCardDependent<M>, IUse
      */
     private handleChangeTheme() {
         // this.depends?.mask.emit("show", void 0);
-        this.emit("clickChangeTheme", void 0);
+        this.emit("clickChangeTheme");
     }
 }
 
