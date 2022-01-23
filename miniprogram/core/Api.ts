@@ -1,4 +1,4 @@
-import { Emitter, EventType } from "./Emitter";
+import { Emitter, EventType, EventMixin } from "./Emitter";
 import { API_FAILED_SHOW_MESSAGE } from "./Config";
 import { Logger, LogLabel, LevelLogLabel, colorRadio, StatusLabel } from "./Logger";
 interface IAppAPIParam {
@@ -156,16 +156,7 @@ class API<
     O extends IAnyData = IAnyData,
     E extends Record<EventType, any> = Record<EventType, any>,
     U extends IAnyData = IAnyData
-> extends Emitter <
-    {
-        // 这个复杂的泛型是为了 MixIn 用户自定义事件类型
-        // 懂得如何使用就可以了
-        // 不要试图去理解下面这三行代码，真正的恶魔在等着你
-        [P in (keyof (IAPIEvent<I, O> & IAPIResultEvent<O, U>) | keyof E)] : 
-        P extends keyof IAPIEvent<I, O> ? IAPIEvent<I, O>[P] : 
-        P extends keyof IAPIResultEvent<O, U> ? IAPIResultEvent<O, U>[P] : E[P]
-    }
-> {
+> extends Emitter<EventMixin<IAPIEvent<I, O> & IAPIResultEvent<O, U>, E>> {
 
     /**
      * 默认调试标签

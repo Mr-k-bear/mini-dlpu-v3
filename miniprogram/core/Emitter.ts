@@ -15,7 +15,18 @@ export type EventHandlerMap<Events extends Record<EventType, any>> = Map<
 
 // Emitter function type
 type IEmitParamType<E extends Record<EventType, any>, K extends keyof E> = 
-	E[K] extends ( undefined | void ) ? [K] : [K, E[K]];
+	E[K] extends ( undefined | void ) ? [type: K] : [type: K, evt: E[K]];
+
+// Mixin to event object
+export type EventMixin<A extends Record<EventType, any>, B extends Record<EventType, any>> = {
+	[P in (keyof A | keyof B)] :
+		P extends (keyof A & keyof B) ? 
+			A[P] : 
+			P extends keyof A ? 
+				A[P] : 
+				P extends keyof B ? B[P] : 
+			never;
+}
 
 export class Emitter<Events extends Record<EventType, any>> {
 	
