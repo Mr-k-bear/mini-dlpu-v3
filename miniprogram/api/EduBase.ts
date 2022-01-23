@@ -1,7 +1,7 @@
 import { API, IAnyData, GeneralCallbackResult } from "../core/Api";
-import { EventType } from "../core/Emitter";
+import { EventType, Emitter } from "../core/Emitter";
 
-interface ILoginEvent {
+type ILoginEvent = {
 
     /**
      * session 过期
@@ -56,37 +56,37 @@ abstract class EduBase<
             if(!info) {
                 isSuccess = false;
                 errMsg = "Bad Data";
-                this.emit("badData", { errMsg });
+                (this as Emitter<IAnyData>).emit("badData", { errMsg });
             }
 
             if (isSuccess) switch (info.code) {
                 case (1):
                     res = parseFunction(info.data);
                     errMsg = info.err_msg ?? "Success";
-                    this.emit("ok", res!);
+                    (this as Emitter<IAnyData>).emit("ok", res!);
                     break;
 
                 case (2):
                     isSuccess = false;
                     errMsg = info.err_msg ?? "Session Expire";
-                    this.emit("expire", { errMsg });
+                    (this as Emitter<IAnyData>).emit("expire", { errMsg });
                     break;
 
                 case (3):
                     isSuccess = false;
                     errMsg = info.err_msg ?? "Unauthorized";
-                    this.emit("unauthorized", { errMsg });
+                    (this as Emitter<IAnyData>).emit("unauthorized", { errMsg });
                     break;
 
                 case (4):
                     isSuccess = false;
                     errMsg = info.err_msg ?? "Error";
-                    this.emit("error", { errMsg });
+                    (this as Emitter<IAnyData>).emit("error", { errMsg });
                     break;
             }
 
-            if (!isSuccess) this.emit("no", { errMsg });
-            this.emit("done", { errMsg, data: res });
+            if (!isSuccess) (this as Emitter<IAnyData>).emit("no", { errMsg });
+            (this as Emitter<IAnyData>).emit("done", { errMsg, data: res });
         });
 	}
 }

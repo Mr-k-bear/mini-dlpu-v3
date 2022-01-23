@@ -2,7 +2,7 @@ import { Modular, Manager } from "../../core/Module";
 import { Mask } from "../../modular/Mask/Mask";
 
 type IUserCardDependent<M extends Manager> = {
-    mask: Mask<M>
+    // mask: Mask<M>
 }
 
 type IUserCardEvent = {
@@ -23,8 +23,8 @@ class UserCard<M extends Manager> extends Modular<M, IUserCardDependent<M>, IUse
      * 处理主题更换
      */
     private handleChangeTheme() {
-        this.depends?.mask.emit("show", void 0);
-        this.emit("clickChangeTheme", void 0);
+        // this.depends?.mask.emit("show", void 0);
+        this.emit("clickChangeTheme");
     }
 }
 

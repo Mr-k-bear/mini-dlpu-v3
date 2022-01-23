@@ -1,4 +1,4 @@
-import { Emitter, EventType } from "./Emitter";
+import { Emitter, EventType, EventMixin } from "./Emitter";
 import { API_FAILED_SHOW_MESSAGE } from "./Config";
 import { Logger, LogLabel, LevelLogLabel, colorRadio, StatusLabel } from "./Logger";
 interface IAppAPIParam {
@@ -156,16 +156,7 @@ class API<
     O extends IAnyData = IAnyData,
     E extends Record<EventType, any> = Record<EventType, any>,
     U extends IAnyData = IAnyData
-> extends Emitter <
-    {
-        // 这个复杂的泛型是为了 MixIn 用户自定义事件类型
-        // 懂得如何使用就可以了
-        // 不要试图去理解下面这三行代码，真正的恶魔在等着你
-        [P in (keyof (IAPIEvent<I, O> & IAPIResultEvent<O, U>) | keyof E)] : 
-        P extends keyof IAPIEvent<I, O> ? IAPIEvent<I, O>[P] : 
-        P extends keyof IAPIResultEvent<O, U> ? IAPIResultEvent<O, U>[P] : E[P]
-    }
-> {
+> extends Emitter<EventMixin<IAPIEvent<I, O> & IAPIResultEvent<O, U>, E>> {
 
     /**
      * 默认调试标签
@@ -316,7 +307,7 @@ class API<
         }
 
         // 触发数据初始化事件
-        this.emit("initData", this.data);
+        (this as Emitter<IAnyData>).emit("initData", this.data);
 
         // 重置请求数据
         const requestData:IWxRequestOption<O> = this.requestData = {
@@ -343,7 +334,7 @@ class API<
         }
 
         // 触发数据解析
-        this.emit("parseRequestData", this.data);
+        (this as Emitter<IAnyData>).emit("parseRequestData", this.data);
 
         // 数据收集
         for (let key in this.params) {
@@ -461,18 +452,18 @@ class API<
         let request = () => {
 
             // 触发请求发送事件
-            this.emit("request", this.requestData!)
+            (this as Emitter<IAnyData>).emit("request", this.requestData!)
 
             wx.request<O>({
                 ...this.requestData!,
                 success: (e) => {
-                    this.emit("success", e);
+                    (this as Emitter<IAnyData>).emit("success", e);
                 },
                 fail: (e) => {
-                    this.emit("fail", e);
+                    (this as Emitter<IAnyData>).emit("fail", e);
                 },
                 complete: (e) => {
-                    this.emit("complete", e);
+                    (this as Emitter<IAnyData>).emit("complete", e);
                 }
             });
         }
@@ -490,12 +481,12 @@ class API<
                 // 使用上次请求结果
                 if (this.policy === RequestPolicy.useLastRequest) {
                     lastAPI.on("success", (e) => {
-                        this.emit("success", e as SuccessCallbackResult<O>);
-                        this.emit("complete", {errMsg: e.errMsg});
+                        (this as Emitter<IAnyData>).emit("success", e as SuccessCallbackResult<O>);
+                        (this as Emitter<IAnyData>).emit("complete", {errMsg: e.errMsg});
                     });
                     lastAPI.on("fail", (e) => {
-                        this.emit("fail", e);
-                        this.emit("complete", {errMsg: e.errMsg});
+                        (this as Emitter<IAnyData>).emit("fail", e);
+                        (this as Emitter<IAnyData>).emit("complete", {errMsg: e.errMsg});
                     });
                 }
 
@@ -605,8 +596,8 @@ class API<
      */
     public addFailedCallBack(): this {
         this.on("fail", (e) => {
-            this.emit("no", e as any);
-            this.emit("done", e as any);
+            (this as Emitter<IAnyData>).emit("no", e as any);
+            (this as Emitter<IAnyData>).emit("done", e as any);
         });
         return this;
     }

@@ -106,8 +106,8 @@ class Mask<M extends Manager> extends Modular<M, {}, IMaskEvent> {
      * 处理蒙版点击事件
      */
 	private handleClickMask() {
-		if (this.autoCloseOnClick) this.emit("hide", void 0);
-        this.emit("click", void 0);
+		if (this.autoCloseOnClick) this.emit("hide");
+        this.emit("click");
 	}
 }
 

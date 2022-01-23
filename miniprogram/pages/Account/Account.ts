@@ -10,10 +10,10 @@ import { Mask } from "../../modular/Mask/Mask";
     const { manager, query } = await Manager.PageAsync();
 
     // 添加蒙版 Modular
-    const mask = manager.addModule(Mask, "mask");
+    // const mask = manager.addModule(Mask, "mask");
 
     // 添加 UserCard Modular
-    manager.addModule(UserCard, "userCard", { mask });
+    manager.addModule(UserCard, "userCard");
 
     // 添加 MainFunction Modular
     manager.addModule(MainFunction, "mainFunction");
