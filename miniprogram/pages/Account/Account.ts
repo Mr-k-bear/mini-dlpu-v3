@@ -2,7 +2,7 @@ import { Manager } from "../../core/Module";
 import { UserCard } from "./UserCard";
 import { MainFunction } from "./MainFunction";
 import { FunctionList } from "./FunctionList";
-import { Mask } from "../../modular/Mask/Mask";
+import { PopupLayer } from "../../modular/PopupLayer";
 
 (async () => {
 
@@ -10,7 +10,8 @@ import { Mask } from "../../modular/Mask/Mask";
     const { manager, query } = await Manager.PageAsync();
 
     // 添加蒙版 Modular
-    // const mask = manager.addModule(Mask, "mask");
+    const popupLayer: PopupLayer<"a" | "b"> = manager.addModule(PopupLayer, "mask") as any;
+    popupLayer.emit("show", "a");
 
     // 添加 UserCard Modular
     manager.addModule(UserCard, "userCard");
