@@ -1,6 +1,18 @@
+<!-- 层遮蔽层 -->
+<view class="occlude {{  mask$occlude$isShow ? 'show-fade' : 'hide-fade' }} {{ mask$occlude$isDisplay ? 'block' : 'none' }}" bindtap="mask$clickMask"></view>
+
 <!-- 蒙版 -->
-<view class="mask {{  mask$isShow ? 'show' : 'hide' }} {{ mask$isDisplay ? 'block' : 'none' }}" 
-    bindtap="mask$handleClickMask"></view>
+<view class="mask {{  mask$mask$isShow ? 'show-fade' : 'hide-fade' }} {{ mask$mask$isDisplay ? 'block' : 'none' }}" bindtap="mask$clickMask"></view>
+
+<!-- 层A -->
+<view class="layer {{  mask$layerA$isShow ? 'show-scale' : 'hide-scale' }} {{ mask$layerA$isDisplay ? 'block' : 'none' }}" bindtap="mask$clickMask">
+    <view class="card" style="height: 300px; line-height: 300px; text-align:center" catchtap="testLayerA$click">layerA(点击显示layerB)</view>
+</view>
+
+<!-- 层B -->
+<view class="layer {{  mask$layerB$isShow ? 'show-scale' : 'hide-scale' }} {{ mask$layerB$isDisplay ? 'block' : 'none' }}" bindtap="mask$clickMask">
+    <view class="card" style="height: 200px; line-height: 200px; text-align:center" catchtap>layerB</view>
+</view>
 
 <!-- 顶部的阴影 -->
 <view class="top-shadow"></view>

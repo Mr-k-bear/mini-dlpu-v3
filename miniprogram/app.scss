@@ -16,10 +16,14 @@ $black-filter: brightness(0) opacity(.65);
 $white-filter: brightness(100) opacity(.65);
 $blue-filter: opacity(1);
 
-// 页面容器外边距
-view.container {
+@mixin container {
     width: 88%;
     padding: 0 6%;
+}
+
+// 页面容器外边距
+view.container {
+    @include container;
 }
 
 // 带阴影的 card

@@ -1,0 +1,99 @@
+@import "../app.scss";
+
+view.mask {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba($color: #000000, $alpha: .2);
+	z-index: 1;
+}
+
+view.layer {
+	position: fixed;
+	@include container;
+	height: 100%;
+	z-index: 2;
+    justify-content: center;
+    align-items: center;
+}
+
+view.occlude {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	z-index: 3;
+}
+
+view.mask.block, view.layer.block, view.occlude.block {
+    display: flex;
+}
+
+view.mask.none, view.layer.none, view.occlude.none {
+    display: none;
+}
+
+view.mask.show-fade, view.layer.show-fade, view.occlude.show-fade {
+    animation: show-fade .1s cubic-bezier(0, 0, 1, 1) both;
+    opacity: 1;
+}
+
+view.mask.hide-fade, view.layer.hide-fade, view.occlude.hide-fade {
+    animation: hide-fade .1s cubic-bezier(0, 0, 1, 1) both;
+    opacity: 0;
+}
+
+view.mask.show-scale, view.layer.show-scale, view.occlude.show-scale {
+    animation: show-scale .3s cubic-bezier(.1, .9, .2, 1) both,
+    show-fade .1s cubic-bezier(0, 0, 1, 1) both;
+    transform: scale3d(1, 1, 1);
+    opacity: 1;
+}
+
+view.mask.hide-scale, view.layer.hide-scale, view.occlude.hide-scale {
+    animation: hide-scale .3s cubic-bezier(.1, .9, .2, 1) both, 
+    hide-fade .1s cubic-bezier(0, 0, 1, 1) both;
+    transform: scale3d(.9, .9, 1);
+    opacity: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+    view.mask {
+        background-color: rgba($color: #000000, $alpha: .5);
+    }
+}
+
+@keyframes show-fade{
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes hide-fade{
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes show-scale{
+    from {
+        transform: scale3d(1.15, 1.15, 1);
+    }
+    to {
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+@keyframes hide-scale{
+    from {
+        transform: scale3d(1, 1, 1);
+    }
+    to {
+        transform: scale3d(.9, .9, 1);
+    }
+}

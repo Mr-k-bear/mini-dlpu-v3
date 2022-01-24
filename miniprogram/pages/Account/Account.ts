@@ -3,18 +3,29 @@ import { UserCard } from "./UserCard";
 import { MainFunction } from "./MainFunction";
 import { FunctionList } from "./FunctionList";
 import { PopupLayer } from "../../modular/PopupLayer";
+import { TestLayerA } from "./TestLayerA";
 
 (async () => {
 
     // 初始化页面
     const { manager, query } = await Manager.PageAsync();
 
-    // 添加蒙版 Modular
-    const popupLayer: PopupLayer<"a" | "b"> = manager.addModule(PopupLayer, "mask") as any;
-    popupLayer.emit("show", "a");
+    // 添加弹出层 Modular
+    const popupLayer: PopupLayer<"layerA" | "layerB"> = manager.addModule(PopupLayer, "mask") as any;
 
     // 添加 UserCard Modular
-    manager.addModule(UserCard, "userCard");
+    const userCard = manager.addModule(UserCard, "userCard");
+
+    //#region test layer
+    // popupLayer.hideOtherWhenShow = false;
+    const testLayerA = manager.addModule(TestLayerA, "testLayerA");
+    userCard.on("clickChangeTheme", () => {
+        popupLayer.emit("show", "layerA");
+    })
+    testLayerA.on("click", () => {
+        popupLayer.emit("show", "layerB");
+    })
+    //#endregion
 
     // 添加 MainFunction Modular
     manager.addModule(MainFunction, "mainFunction");
