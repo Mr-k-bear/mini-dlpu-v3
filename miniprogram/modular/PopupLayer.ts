@@ -3,9 +3,54 @@ import { Emitter } from "core/Emitter";
 import { Modular, Manager } from "../core/Module";
 
 /**
+ * 动画类型
+ */
+enum AnimateType {
+    fade = 1,
+    scale = 2,
+    none = 3,
+}
+
+/**
  * 显示层
  */
 class DisplayLayer {
+
+    /**
+     * 类名
+     */
+    public get className(): string {
+        let res = this.isDisplay ? "block" : "none";
+
+        switch (this.animateType) {
+            case AnimateType.fade:
+                res += " mask";
+                break;
+
+            case AnimateType.scale:
+                res += " layer";
+                break;
+
+            case AnimateType.none:
+                res += " occlude";
+                break;
+        }
+
+        switch (this.animateType) {
+            case AnimateType.fade:
+                res += this.isShow ? " show-fade" : " hide-fade";
+                break;
+
+            case AnimateType.scale:
+                res += this.isShow ? " show-scale" : " hide-scale";
+                break;
+
+            case AnimateType.none:
+                break;
+        }
+
+        return res;
+    }
 
 	/**
 	 * Layer 使用的 key
@@ -15,7 +60,21 @@ class DisplayLayer {
 	/**
 	 * 使用的动画类型
 	 */
-	public animateTime: number = 300;
+	public animateType: AnimateType = AnimateType.scale;
+
+    /**
+     * 动画时间
+     */
+    public get animateTime(): number {
+        switch (this.animateType) {
+            case AnimateType.fade:
+                return 100;
+            case AnimateType.scale:
+                return 300;
+            case AnimateType.none:
+                return -1;
+        }
+    };
 	
 	/**
 	 * 是否显示
@@ -89,6 +148,16 @@ class PopupLayer<
 	 */
 	private layers: Map<L | commonLayerType, DisplayLayer> = new Map();
 
+    /**
+     * 初始化层
+     * @param key 初始化关键字
+     */
+    public initLayers(key: L[]) {
+        for (let i = 0; i < key.length; i++) {
+            this.render(this.getDisplayLayer(key[i]));
+        }
+    }
+
 	public onLoad(): void {
 		this.on("show", this.handleShowLayer);
 		this.on("hide", this.handleHideLayer);
@@ -96,12 +165,21 @@ class PopupLayer<
 
         // 添加蒙版层
         const maskLayer = this.getDisplayLayer("mask");
-        maskLayer.animateTime = 100;
+        maskLayer.animateType = AnimateType.fade;
+        this.render(maskLayer);
 
         // 添加遮蔽层
         const occludeLayer = this.getDisplayLayer("occlude");
-        occludeLayer.animateTime = -1;
+        occludeLayer.animateType = AnimateType.none;
+        this.render(occludeLayer);
 	}
+
+    /**
+     * 渲染 Layers
+     */
+    private render(layer: DisplayLayer) {
+        this.setData({ [`${ layer.key }$className`]: layer.className });
+    }
 
 	/**
 	 * 获取显示层
@@ -161,10 +239,7 @@ class PopupLayer<
 
         displayLayer.isShow = true;
         displayLayer.isDisplay = true;
-		this.setData({ 
-            [`${ e }$isShow`]: true,
-            [`${ e }$isDisplay`]: true
-        });
+        this.render(displayLayer);
 
         this.emit("change", displayLayer);
 	};
@@ -182,16 +257,11 @@ class PopupLayer<
 
             displayLayer.isShow = false;
             displayLayer.isDisplay = false;
-            this.setData({ 
-                [`${ e }$isShow`]: false,
-                [`${ e }$isDisplay`]: false
-            });
+            this.render(displayLayer);
         } else {
 
             displayLayer.isShow = false;
-            this.setData({ 
-                [`${ e }$isShow`]: false 
-            });
+            this.render(displayLayer);
 
             // 开启遮蔽
             if (this.showOccludeWhenHide) {
@@ -200,9 +270,7 @@ class PopupLayer<
 
             displayLayer.disappearTimer = setTimeout(() => {
                 displayLayer.isDisplay = false;
-                this.setData({ 
-                    [`${ e }$isDisplay`]: false
-                });
+                this.render(displayLayer);
 
                 // 取消 timer
                 displayLayer.disappearTimer = undefined;
