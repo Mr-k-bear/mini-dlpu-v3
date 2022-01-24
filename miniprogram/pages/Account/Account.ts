@@ -17,7 +17,7 @@ import { TestLayerA } from "./TestLayerA";
     const userCard = manager.addModule(UserCard, "userCard");
 
     //#region test layer
-    // popupLayer.hideOtherWhenShow = false;
+    popupLayer.initLayers(["layerA", "layerB"]);
     const testLayerA = manager.addModule(TestLayerA, "testLayerA");
     userCard.on("clickChangeTheme", () => {
         popupLayer.emit("show", "layerA");
