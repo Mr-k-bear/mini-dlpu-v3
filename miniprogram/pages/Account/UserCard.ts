@@ -1,9 +1,4 @@
 import { Modular, Manager } from "../../core/Module";
-import { Mask } from "../../modular/Mask/Mask";
-
-type IUserCardDependent<M extends Manager> = {
-    // mask: Mask<M>
-}
 
 type IUserCardEvent = {
 
@@ -13,17 +8,16 @@ type IUserCardEvent = {
     clickChangeTheme: void;
 }
 
-class UserCard<M extends Manager> extends Modular<M, IUserCardDependent<M>, IUserCardEvent> {
+class UserCard<M extends Manager> extends Modular<M, {}, IUserCardEvent> {
 
     public override onLoad() {
-        this.setFunc(this.handleChangeTheme, "changeTheme")
+        this.setFunc(this.handleChangeTheme, "changeTheme");
     }
     
     /**
      * 处理主题更换
      */
     private handleChangeTheme() {
-        // this.depends?.mask.emit("show", void 0);
         this.emit("clickChangeTheme");
     }
 }
