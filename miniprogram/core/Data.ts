@@ -1,3 +1,4 @@
+import { Storage } from "./Storage";
 
 /**
  * 数据层键值设置
@@ -12,22 +13,22 @@ interface IDataParamSettingItem {
     /**
      * 键值是否可以获取
      */
-    isGet: boolean;
+    get: (...P: any) => this["type"] | INone;
 
     /**
      * 键值是否可以设置
      */
-    isSet: boolean;
+    set: (...P: [this["type"], ...any]) => any | INone;
 
     /**
      * 是否仅为异步获取
      */
-    isGetAsync?: boolean;
+    getAsync?: (...P: any) => Promise<this["type"]> | INone;
 
     /**
      * 是否仅为异步设置
      */
-    isSetAsync?: boolean;
+    setAsync?: (...P: [this["type"], ...any]) => Promise<any> | INone;
 }
 
 /**
@@ -37,12 +38,7 @@ interface IDataParamSetting {
     [x: string]: IDataParamSettingItem
 }
 
-type IGet<T> = () => T;
-type IGetAsync<T> = () => Promise<T>;
-type ISet<T> = (data: T) => INone;
-type ISetAsync<T> = (data: T) => Promise<INone>;
-
-type INone = undefined | void | unknown;
+type INone = undefined | void;
 
 /**
  * 注册表结构
@@ -52,22 +48,24 @@ type IRegistryItem<S extends IDataParamSettingItem> = {
     /**
      * 获取方法
      */
-    get: S["isGetAsync"] extends true ? INone : S["isGet"] extends true ? IGet<S["type"]> : INone;
+    get: S["get"];
 
     /**
      * 异步获取方法
      */
-    getAsync: S["isGet"] extends true ? IGetAsync<S["type"]> : INone;
+    getAsync: S["getAsync"] extends Function ? S["getAsync"] : 
+    S["get"] extends Function ? (...param: Parameters<S["get"]>) => Promise<S["type"]> : INone;
 
     /**
      * 设置方法
      */
-    set: S["isSetAsync"] extends true ? INone : S["isSet"] extends true ? ISet<S["type"]> : INone;
+    set: S["set"];
 
     /**
      * 异步设置方法
      */
-    setAsync: S["isSet"] extends true ? ISetAsync<S["type"]> : INone;
+    setAsync: S["setAsync"] extends Function ? S["setAsync"] : 
+    S["set"] extends Function ? (...param: Parameters<S["set"]>) => Promise<ReturnType<S["set"]>> : INone;
 }
 
 /**
@@ -91,16 +89,16 @@ type IAutoSelect<IF extends boolean, A, B> = IF extends true ? A : B;
  * ```typescript
  * class TestData extends Data<{
  *     test: {
- *         type: number,
- *         isGet: true,
- *         isSet: true,
- *         isGetAsync: true
+ *         type: number
+ *         get: () => number,
+ *         set: (val: number) => void,
+ *         getAsync: () => Promise<number>
  *     }
- * }> {
- *     public onLoad() {
+ *     }> {
+ *         public onLoad() {
  *         let dataObject = {key: 1}
  *         this.getter("test", () => 1);
- *         this.registerKeyFromObject("test", "key", dataObject);
+ *         this.registerKeyFromObject(dataObject, "test", "key");
  *     }
  * }
  * ```
@@ -183,9 +181,9 @@ class Data<D extends IDataParamSetting> {
      */
     protected registerKeyFromObject<
         KEY extends keyof D, 
-        F extends keyof O, 
+        F extends string, 
         O extends {[K in F]: D[KEY]["type"]}
-    > (key: KEY, keyFromObject: F, object: O) {
+    > (object: O, key: KEY, keyFromObject: F = key as any) {
 
         // 注册同步获取
         this.getter(key, () => {
@@ -196,6 +194,33 @@ class Data<D extends IDataParamSetting> {
         this.setter(key, (data: any) => {
             object[keyFromObject] = data
         })
+    }
+
+    /**
+     * 关联 Storage 中的 key
+     * @param key Data 层键值
+     * @param keyFromStorage StorageKey
+     */
+    protected registerKeyFromStorage<
+        KEY extends keyof D,
+        F extends string, 
+        S extends Storage<{[K in F]: D[KEY]["type"]}>
+    > (storage: S, key: KEY, keyFromStorage: F = key as any) {
+
+        // 同步获取
+        this.getter(key, () => {
+            return storage.get(keyFromStorage);
+        });
+
+        // 同步设置
+        this.setter(key, (data: any) => {
+            storage.set(keyFromStorage, data);
+        });
+
+        // 异步设置
+        this.setter(key, (async (data: any) => {
+            await storage.set(keyFromStorage, data);
+        }) as any, true);
     }
 
     /**
@@ -223,12 +248,12 @@ class Data<D extends IDataParamSetting> {
     
             // 检验 getter
             if (item.get && !item.getAsync) {
-                item.getAsync = this.syncFn2AsyncFn(item.get as IGet<D[KEY]["type"]>);
+                item.getAsync = this.syncFn2AsyncFn(item.get) as any;
             }
     
             // 检验 setter
             if (item.set && !item.setAsync) {
-                item.setAsync = this.syncFn2AsyncFn(item.set as ISet<D[KEY]["type"]>);
+                item.setAsync = this.syncFn2AsyncFn(item.set) as any;
             }
         }
 
@@ -240,11 +265,13 @@ class Data<D extends IDataParamSetting> {
      * 将同步函数转换为异步函数
      * @param fn 同步函数
      */
-    protected syncFn2AsyncFn<D, H extends (IGet<D> | ISet<D>)> (fn: H): 
-    IAutoSelect<H extends IGet<D> ? true : false, IGetAsync<D>, ISetAsync<D>> {
+    protected syncFn2AsyncFn<F extends (...p: any) => any> (fn: F): (...param: Parameters<F>) => ReturnType<F> {
         const asyncFn = async (...param: [D]) => {
             return fn(...param);
         };
         return asyncFn as any;
     }
 }
+
+export { Data };
+export default Data;
