@@ -13,22 +13,22 @@ interface IDataParamSettingItem {
     /**
      * 键值是否可以获取
      */
-    get: (...P: any) => this["type"] | INone;
+    get?: ((...P: any) => this["type"]) | INone;
 
     /**
      * 键值是否可以设置
      */
-    set: (...P: [this["type"], ...any]) => any | INone;
+    set?: ((...P: [this["type"], ...any]) => any) | INone;
 
     /**
      * 是否仅为异步获取
      */
-    getAsync?: (...P: any) => Promise<this["type"]> | INone;
+    getAsync?: ((...P: any) => Promise<this["type"]>) | INone;
 
     /**
      * 是否仅为异步设置
      */
-    setAsync?: (...P: [this["type"], ...any]) => Promise<any> | INone;
+    setAsync?: ((...P: [this["type"], ...any]) => Promise<any>) | INone;
 }
 
 /**
@@ -54,7 +54,7 @@ type IRegistryItem<S extends IDataParamSettingItem> = {
      * 异步获取方法
      */
     getAsync: S["getAsync"] extends Function ? S["getAsync"] : 
-    S["get"] extends Function ? (...param: Parameters<S["get"]>) => Promise<S["type"]> : INone;
+    S["get"] extends ((...P: any) => S["type"]) ? (...param: Parameters<S["get"]>) => Promise<S["type"]> : INone;
 
     /**
      * 设置方法
@@ -65,7 +65,7 @@ type IRegistryItem<S extends IDataParamSettingItem> = {
      * 异步设置方法
      */
     setAsync: S["setAsync"] extends Function ? S["setAsync"] : 
-    S["set"] extends Function ? (...param: Parameters<S["set"]>) => Promise<ReturnType<S["set"]>> : INone;
+    S["set"] extends ((...P: [S["type"], ...any]) => any) ? (...param: Parameters<S["set"]>) => Promise<ReturnType<S["set"]>> : INone;
 }
 
 /**
