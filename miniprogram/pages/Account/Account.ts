@@ -2,8 +2,8 @@ import { Manager } from "../../core/Module";
 import { UserCard } from "./UserCard";
 import { MainFunction } from "./MainFunction";
 import { FunctionList } from "./FunctionList";
+import { Login } from "./Login";
 import { PopupLayer } from "../../modular/PopupLayer";
-import { TestLayerA } from "./TestLayerA";
 
 (async () => {
 
@@ -11,21 +11,20 @@ import { TestLayerA } from "./TestLayerA";
     const { manager, query } = await Manager.PageAsync();
 
     // 添加弹出层 Modular
-    const popupLayer: PopupLayer<"layerA" | "layerB"> = manager.addModule(PopupLayer, "mask") as any;
+    const popupLayer: PopupLayer<"loginLayer"> = manager.addModule(PopupLayer, "mask") as any;
+    
+    // 初始化弹出层
+    popupLayer.initLayers(["loginLayer"]);
 
     // 添加 UserCard Modular
     const userCard = manager.addModule(UserCard, "userCard");
 
-    //#region test layer
-    popupLayer.initLayers(["layerA", "layerB"]);
-    const testLayerA = manager.addModule(TestLayerA, "testLayerA");
+    // 添加登录模块
+    const loginLayer = manager.addModule(Login, "loginLayer");
+
     userCard.on("clickChangeTheme", () => {
-        popupLayer.emit("show", "layerA");
-    })
-    testLayerA.on("click", () => {
-        popupLayer.emit("show", "layerB");
-    })
-    //#endregion
+        popupLayer.emit("show", "loginLayer");
+    });
 
     // 添加 MainFunction Modular
     manager.addModule(MainFunction, "mainFunction");

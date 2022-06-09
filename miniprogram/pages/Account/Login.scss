@@ -1,0 +1,99 @@
+@import "../../app.scss";
+
+$logo-height: 100px;
+
+view.login-layer {
+
+    view.school-logo {
+        height: 0;
+        padding-top: 20px;
+        width: 100%;
+        text-align: center;
+
+        view {
+            z-index: 2;
+            display: inline-block;
+            position: relative;
+            border-radius: 1000px;
+            background-color: $theme-color-light-layout;
+            width: $logo-height;
+            height: $logo-height;
+
+            image {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+
+    view.line-bg {
+        display: flex;
+        box-sizing: border-box;
+        padding: 35px 0;
+        height: $logo-height;
+        width: calc( 100% + 40px );
+        position: relative;
+        left: -20px;
+        flex-direction: column;
+        justify-content: space-around;
+
+        view {
+            height: 0;
+            width: 100%;
+            border-top: 2px solid rgba(0,0,0,.1);
+        }
+    }
+
+    view.student-name {
+        margin: 10px 0 1px 0;
+        text-align: center;
+    }
+
+    view.student-id {
+        margin-bottom: 1px;
+        text-align: center;
+    }
+
+    view.login-state {
+        width: 100%;
+        margin-bottom: 20px;
+        text-align: center;
+
+        view.certified {
+            color: $theme-color-blue;
+            border: 1px solid $theme-color-blue;
+            border-radius: 4px;
+            margin-left: .3em;
+            font-size: .85em;
+            height: 1.2em;
+            padding: 0 2px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+
+            image.text-icon {
+                margin-left: .25em;
+                width: 10px;
+                height: 10px;
+            }
+        }
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+
+    view.login-layer {
+
+        view.school-logo view {
+            background-color: $theme-color-dark-layout;
+            
+            image {
+                filter: $white-filter;
+            }
+        }
+        
+        view.line-bg view {
+            border-top: 2px solid rgba(255,255,255,.1);
+        }
+    }
+}

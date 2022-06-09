@@ -4,14 +4,37 @@
 <!-- 蒙版 -->
 <view class="{{ mask$mask$className }}" bindtap="mask$clickMask"></view>
 
-<!-- 层A -->
-<view class="{{ mask$layerA$className }}" bindtap="mask$clickMask">
-    <view class="card" style="height: 300px; line-height: 300px; text-align:center" catchtap="testLayerA$click">layerA(点击显示layerB)</view>
-</view>
+<!-- 登录层 -->
+<view class="{{ mask$loginLayer$className }}" bindtap="mask$clickMask">
+    <view class="card login-layer" catchtap>
 
-<!-- 层B -->
-<view class="{{ mask$layerB$className }}" bindtap="mask$clickMask">
-    <view class="card" style="height: 200px; line-height: 200px; text-align:center" catchtap>layerB</view>
+        <!-- 学校logo -->
+        <view class="school-logo">
+            <view>
+                <image src="../../image/account/School_DLPU.png"></image>
+            </view>
+        </view>
+        
+        <view class="line-bg">
+            <view wx:for="{{ [0, 1, 2, 3, 4] }}" wx:key="item"></view>
+        </view>
+
+        <!-- 学生姓名 -->
+        <view class="student-name h2">秦浩轩</view>
+
+        <!-- 学号 -->
+        <view class="student-id">1806240113</view>
+
+        <!-- 状态 -->
+        <view class="login-state">
+            <view class="certified">
+                <view class="certifi-info">已认证</view>
+                <image class="text-icon" src="../../image/account/Account_OK.svg"></image>
+            </view>
+        </view>
+
+        <view class="student-id-input"></view>
+    </view>
 </view>
 
 <!-- 顶部的阴影 -->
