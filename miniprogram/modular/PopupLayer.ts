@@ -1,5 +1,5 @@
-import { IAnyData } from "core/Api";
-import { Emitter } from "core/Emitter";
+import { IAnyData } from "../core/Api";
+import { Emitter } from "../core/Emitter";
 import { Modular, Manager } from "../core/Module";
 
 /**

@@ -33,11 +33,6 @@ interface ILoginOutput {
     actualName: string;
 
     /**
-     * 用户是否关注了公共号
-     */
-    isSubscribeWxAccount: boolean;
-
-    /**
      * 教务处的 session
      */
     eduSession: string;

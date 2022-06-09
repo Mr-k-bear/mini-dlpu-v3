@@ -1,7 +1,8 @@
 {
-  "description": "项目配置文件",
+  "description": "项目配置文件，详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
   "packOptions": {
-    "ignore": []
+    "ignore": [],
+    "include": []
   },
   "miniprogramRoot": "miniprogram/",
   "compileType": "miniprogram",
@@ -46,13 +47,16 @@
     "useCompilerPlugins": [
       "typescript",
       "sass"
-    ]
+    ],
+    "useStaticServer": true
   },
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
   "appid": "wx7d809f5e8955843d",
-  "scripts": {
-    "beforeCompile": ""
-  },
-  "condition": {}
+  "condition": {},
+  "srcMiniprogramRoot": "miniprogram/",
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
 }
