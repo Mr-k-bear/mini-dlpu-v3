@@ -61,7 +61,7 @@
         
         <!--每个功能的容器-->
         <view class="branch-funtion" wx:for="{{ mainFunction$mainFunctionList }}" wx:key="index">
-            <view style="{{ index == (mainFunction$mainFunctionList - 1) ? 'border-bottom: 0px' : '' }}">
+            <view style="{{ index == (mainFunction$mainFunctionList.length - 1) ? 'border-right: 0px' : '' }}">
                 <!--每个功能的图片-->
                 <image class="icon" src="../../image/account/Account_{{ item.iconUrl }}.svg"></image>
                 <!--每个功能的文字-->
