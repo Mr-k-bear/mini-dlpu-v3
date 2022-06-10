@@ -6,15 +6,18 @@ $theme-color-light-layout: #F8F8F8;
 $theme-color-light-background: #f4f0f1;
 $theme-color-light-title: rgba(0, 0, 0, .65);
 $theme-color-light-text: rgba(0, 0, 0, .5);
+$theme-color-light-line: rgba(0, 0, 0, .25);
 
 $theme-color-dark-layout: #1f1f1f;
 $theme-color-dark-background: #181615;
 $theme-color-dark-title: rgba(255, 255, 255, .65);
 $theme-color-dark-text: rgba(255, 255, 255, .5);
+$theme-color-dark-line: rgba(255, 255, 255, .25);
 
 $black-filter: brightness(0) opacity(.65);
 $white-filter: brightness(100) opacity(.65);
 $blue-filter: opacity(1);
+$green-filter: hue-rotate(-110deg) opacity(1);
 
 @mixin container {
     width: 88%;
@@ -82,6 +85,14 @@ view.h3 {
     color: $theme-color-light-title;
     font-size: 1em;
     letter-spacing: .1em;
+}
+
+view.button {
+    color: white;
+    background-color: $theme-color-blue;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
 }
  
 @media (prefers-color-scheme: dark){

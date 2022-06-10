@@ -6,7 +6,7 @@ view.login-layer {
 
     view.school-logo {
         height: 0;
-        padding-top: 20px;
+        padding-top: 25px;
         width: 100%;
         text-align: center;
 
@@ -40,7 +40,8 @@ view.login-layer {
         view {
             height: 0;
             width: 100%;
-            border-top: 2px solid rgba(0,0,0,.1);
+            opacity: .5;
+            border-top: 2px solid $theme-color-light-line;
         }
     }
 
@@ -78,6 +79,72 @@ view.login-layer {
             }
         }
     }
+
+    view.student-info-input {
+        display: flex;
+        justify-content: center;
+        padding: 8px 0;
+
+        view.input-icon {
+            box-sizing: border-box;
+            padding: 3px 12px 3px 0;
+            flex-shrink: 0;
+            width: 38px;
+            height: 32px;
+
+            image {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        view.input-view {
+            position: relative;
+            bottom: 3px;
+            box-sizing: border-box;
+            border-bottom: 1.5px solid $theme-color-light-line;
+            flex-grow: 1;
+            width: 100%;
+            height: 32px;
+
+            input {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+
+    view.tip-info {
+        width: 100%;
+        vertical-align: middle;
+        padding: 1px 0;
+        font-size: .9em;
+
+        image {
+            vertical-align: middle;
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+        }
+
+        view {
+            vertical-align: middle;
+            display: inline;
+
+            text {
+                color: $theme-color-blue;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    view.agree-lic image {
+        filter: $green-filter;
+    }
+
+    view.save-button {
+        margin: 15px 0 25px 0;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -93,7 +160,11 @@ view.login-layer {
         }
         
         view.line-bg view {
-            border-top: 2px solid rgba(255,255,255,.1);
+            border-top: 2px solid $theme-color-dark-line;
+        }
+
+        view.student-info-input view.input-view {
+            border-bottom: 1.5px solid $theme-color-dark-line;
         }
     }
 }
